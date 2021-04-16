@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { Button, Box } from "@material-ui/core";
 import ActionPaper from "../shared/ActionPaper";
 import ButtonCircularProgress from "../shared/ButtonCircularProgress";
-import AddClientOptions from "./AddClientOptions";
+import AddClientOptions from "./AddUserOptions";
 import { Client, ClientInit, EmptyClient } from '../shared/models/Client'
 import { FetchClientList, PostNewClient } from '../shared/api/Client'
 
@@ -33,6 +33,8 @@ function AddClient(props) {
       onClose();
     }, 1500);
   }, [setLoading, onClose, pushMessageToSnackbar]);*/
+
+  useEffect(() => {FetchClientList(setClient);}, [setClient]);
 
   return (
     <Fragment>

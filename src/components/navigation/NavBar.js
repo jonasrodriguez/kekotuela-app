@@ -22,8 +22,9 @@ import {
 } from "@material-ui/core";
 import DashboardIcon from "@material-ui/icons/Dashboard";
 import ImageIcon from "@material-ui/icons/Image";
+import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 import AccountBalanceIcon from "@material-ui/icons/AccountBalance";
-import PowerSettingsNewIcon from "@material-ui/icons/PowerSettingsNew";
+import WorkIcon from '@material-ui/icons/Work';
 import MenuIcon from "@material-ui/icons/Menu";
 import SupervisorAccountIcon from "@material-ui/icons/SupervisorAccount";
 import MessagePopperButton from "./MessagePopperButton";
@@ -151,14 +152,14 @@ function NavBar(props) {
 
   const menuItems = [
     {
-      link: "/c/clients",
-      name: "Dashboard",
+      link: "/c/orders",
+      name: "Partes",
       onClick: closeMobileDrawer,
       icon: {
         desktop: (
           <DashboardIcon
             className={
-              selectedTab === "Dashboard" ? classes.textPrimary : "text-white"
+              selectedTab === "Partes" ? classes.textPrimary : "text-white"
             }
             fontSize="small"
           />
@@ -190,9 +191,7 @@ function NavBar(props) {
         desktop: (
           <AccountBalanceIcon
             className={
-              selectedTab === "Subscription"
-                ? classes.textPrimary
-                : "text-white"
+              selectedTab === "Subscription" ? classes.textPrimary : "text-white"
             }
             fontSize="small"
           />
@@ -201,15 +200,37 @@ function NavBar(props) {
       },
     },
     {
-      link: "/",
-      name: "Logout",
+      link: "/c/clients",
+      name: "Clientes",
+      onClick: closeMobileDrawer,
       icon: {
         desktop: (
-          <PowerSettingsNewIcon className="text-white" fontSize="small" />
+          <PeopleAltIcon
+            className={
+              selectedTab === "Clientes" ? classes.textPrimary : "text-white"
+            }
+            fontSize="small"
+          />
         ),
-        mobile: <PowerSettingsNewIcon className="text-white" />,
+        mobile: <PeopleAltIcon className="text-white" />,
       },
     },
+    {
+      link: "/c/users",
+      name: "Usuarios",
+      onClick: closeMobileDrawer,
+      icon: {
+        desktop: (
+          <WorkIcon
+            className={
+              selectedTab === "Usuarios" ? classes.textPrimary : "text-white"
+            }
+            fontSize="small"
+          />
+        ),
+        mobile: <WorkIcon className="text-white" />,
+      },
+    },          
   ];
   return (
     <Fragment>

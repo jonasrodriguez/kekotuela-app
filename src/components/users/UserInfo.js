@@ -9,17 +9,17 @@ const styles = {
 };
 
 function ClientInfo(props) {
-  const { classes, openAddClientModal } = props;
+  const { classes, openAddUserModal } = props;
   return (
     <Toolbar className={classes.toolbar}>
-      <ListItemText primary="Lista clientes" /*secondary="Premium Account"*/ />
+      <ListItemText primary="Lista usuarios" /*secondary="Premium Account"*/ />
       <Button
         variant="contained"
         color="secondary"
         disableElevation
-        onClick={openAddClientModal}
+        onClick={openAddUserModal}
       >
-        Añadir Cliente
+        Añadir Usuario
       </Button>
     </Toolbar>
   );
@@ -27,7 +27,7 @@ function ClientInfo(props) {
 
 ClientInfo.propTypes = {
   classes: PropTypes.object.isRequired,
-  openAddClientModal: PropTypes.object.isRequired
+  openAddUserModal: PropTypes.object.isRequired
 };
 
 export default withStyles(styles)(ClientInfo);

@@ -4,6 +4,8 @@ import { Switch } from "react-router-dom";
 import { withStyles } from "@material-ui/core";
 import PropsRoute from "./shared/PropsRoute";
 import Clients from "./clients/Clients";
+import Users from "./users/Users";
+import Orders from "./orders/Orders";
 
 const styles = (theme) => ({
   wrapper: {
@@ -46,8 +48,16 @@ function Routing(props) {
     <div className={classes.wrapper}>
       <Switch>
         <PropsRoute
+          path="/c/orders"
+          component={Orders}
+        />
+        <PropsRoute
           path="/c/clients"
           component={Clients}
+        />
+        <PropsRoute
+          path="/c/users"
+          component={Users}
         />
       </Switch>
     </div>

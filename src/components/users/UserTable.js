@@ -1,6 +1,6 @@
-import React, { useCallback, useState } from "react";
+import React from "react";
 import PropTypes from "prop-types";
-import { Box, Table, TableBody, TableCell, TablePagination, TableRow, withStyles } from "@material-ui/core";
+import { Box, Table, TableBody, TableCell, TableRow, withStyles } from "@material-ui/core";
 import EnhancedTableHead from "../shared/EnhancedTableHead";
 import HighlightedInformation from "../shared/HighlightedInformation";
 
@@ -32,6 +32,10 @@ const styles = theme => ({
 
 const rows = [
   {
+    id: "userName",
+    label: "Usuario"
+  },
+  {
     id: "name",
     label: "Nombre"
   },
@@ -40,33 +44,23 @@ const rows = [
     label: "Telefono"
   },
   {
-    id: "dni",
-    label: "Documento Identidad"
+    id: "email",
+    label: "Email"
   },
   {
-    id: "city",
-    label: "Ciudad"
+    id: "admin",
+    label: "Administrador"
   }
 ];
 
-const rowsPerPage = 25;
+function UserTable(props) {
+  const { users, classes } = props;
 
-function ClientTable(props) {
-  const { clients, classes } = props;
-  const [page, setPage] = useState(0);
-
-  const handleChangePage = useCallback(
-    (_, page) => {
-      setPage(page);
-    },
-    [setPage]
-  );
-
-  if (!clients.length) {
+  if (!users.length) {
     return (
       <Box className={classes.contentWrapper}>
         <HighlightedInformation>
-          No hay clientes en el sistema.
+          No hay usuarios en el sistema.
         </HighlightedInformation>
       </Box> 
     );
@@ -74,52 +68,38 @@ function ClientTable(props) {
   return (
     <Box className={classes.tableWrapper}>
       <Table aria-labelledby="tableTitle">
-        <EnhancedTableHead rowCount={clients.length} rows={rows} />
+        <EnhancedTableHead rowCount={users.length} rows={rows} />
         <TableBody>
-          {clients
-            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            .map((client, index) => (
+          {users
+            .map((user, index) => (
               <TableRow hover tabIndex={-1} key={index}>
                 <TableCell component="th" scope="row" className={classes.firstData}>
-                  {client.name + ' ' + client.surname}
+                  {user.userName}
                 </TableCell>
                 <TableCell component="th" scope="row">
-                  {client.phone}
+                  {user.name + ' ' + user.surname}
                 </TableCell>
                 <TableCell component="th" scope="row">
-                  {client.dni}
+                  {user.phone}
                 </TableCell>
                 <TableCell component="th" scope="row">
-                  {client.city}
+                  {user.email}
                 </TableCell>
+                <TableCell component="th" scope="row">
+                  {user.permissionLevel}
+                </TableCell>                
               </TableRow>
             ))}
         </TableBody>
       </Table>
-      <TablePagination
-        component="div"
-        count={clients.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        backIconButtonProps={{"aria-label": "Previous Page"}}
-        nextIconButtonProps={{"aria-label": "Next Page"}}
-        onChangePage={handleChangePage}
-        classes={{
-          select: classes.dNone,
-          selectIcon: classes.dNone,
-          actions: clients.length > 0 ? classes.dBlock : classes.dNone,
-          caption: clients.length > 0 ? classes.dBlock : classes.dNone
-        }}
-        labelRowsPerPage=""
-      />
     </Box>
   );
 }
 
-ClientTable.propTypes = {
+UserTable.propTypes = {
   theme: PropTypes.object.isRequired,
   classes: PropTypes.object.isRequired,
   clients: PropTypes.arrayOf(PropTypes.object).isRequired
 };
 
-export default withStyles(styles, { withTheme: true })(ClientTable);
+export default withStyles(styles, { withTheme: true })(UserTable);

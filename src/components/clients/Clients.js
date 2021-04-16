@@ -4,6 +4,7 @@ import { List, Divider, Paper, withStyles } from "@material-ui/core";
 import ClientTable from "./ClientTable";
 import ClientInfo from "./ClientInfo";
 import AddClient from "./AddClient";
+import { FetchClientList } from '../shared/api/Client';
 
 const styles = {
   divider: {
@@ -14,15 +15,6 @@ const styles = {
 function Clients(props) {
   const classes = props;
   const [clients, setClients] = useState([]);  
-
-  const fetchClientList = useCallback(() => {
-    fetch('http://localhost:3001/clients')
-    .then(res => res.json())
-    .then((data) => { setClients(data); })  
-  }, [setClients]);
-
-  useEffect(() => {fetchClientList();}, [fetchClientList]);
-
   const [isAddClientOpen, setIsAddClientOpen] = useState(false);
 
   const openAddClientModal = useCallback(() => {
@@ -32,6 +24,8 @@ function Clients(props) {
   const closeAddClientModal = useCallback(() => {
     setIsAddClientOpen(false);
   }, [setIsAddClientOpen]);
+
+  useEffect(() => {FetchClientList(setClients);}, [setClients]);  
 
   if (isAddClientOpen) {
     return (
