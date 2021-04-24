@@ -4,8 +4,8 @@ import { Button, Box } from "@material-ui/core";
 import ActionPaper from "../shared/ActionPaper";
 import ButtonCircularProgress from "../shared/ButtonCircularProgress";
 import AddClientOptions from "./AddUserOptions";
-import { Client, ClientInit, EmptyClient } from '../shared/models/Client'
-import { FetchClientList, PostNewClient } from '../shared/api/Client'
+import { Client, ClientInit, EmptyClient } from '../models/Client'
+import { FetchClientList, PostNewClient } from '../api/Client'
 
 function AddClient(props) {
   const { pushMessageToSnackbar, onClose } = props;

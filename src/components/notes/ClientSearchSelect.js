@@ -1,7 +1,7 @@
 import React, { Fragment, useState, useEffect } from "react";
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { TextField, CircularProgress } from "@material-ui/core";
-import { FetchClientList, FilterClientList } from "../shared/api/Client"
+import { FetchClientList, FilterClientList } from "../api/Client"
 
 export default function ClientSearchSelect(props) {
     const { onClientSelected } = props;

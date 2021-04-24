@@ -1,18 +1,19 @@
+const uri = "/api/clients"
 
 export const FetchClientList = (callback)=>{
-    fetch('http://localhost:3001/clients')
+    fetch(uri)
     .then(res => res.json())
     .then((data) => { callback(data); })
 }
 
 export const FetchClientById = (id, callback)=>{
-    fetch('http://localhost:3001/clients/' + id)
+    fetch(uri + id)
     .then(res => res.json())
     .then((data) => { callback(data); })
 }
 
 export const PostNewClient = (client, cb)=>{  
-  fetch('http://localhost:3001/clients', {
+  fetch(uri, {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
@@ -24,6 +25,6 @@ export const PostNewClient = (client, cb)=>{
 }
 
 export const FilterClientList = (filter)=>{
-  return fetch("http://localhost:3001/clients?filter=" + filter)
+  return fetch(uri + "?filter=" + filter)
         .then(res => res.json());
 }

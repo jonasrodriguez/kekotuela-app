@@ -5,7 +5,8 @@ import { withStyles } from "@material-ui/core";
 import PropsRoute from "./shared/PropsRoute";
 import Clients from "./clients/Clients";
 import Users from "./users/Users";
-import Orders from "./orders/Orders";
+import Materials from "./materials/Materials";
+import Notes from "./notes/Notes";
 
 const styles = (theme) => ({
   wrapper: {
@@ -46,11 +47,15 @@ function Routing(props) {
   const {classes} = props;
   return (
     <div className={classes.wrapper}>
-      <Switch>
+      <Switch>        
         <PropsRoute
-          path="/c/orders"
-          component={Orders}
+          path="/c/notes"
+          component={Notes}
         />
+        <PropsRoute
+          path="/c/materials"
+          component={Materials}
+        />        
         <PropsRoute
           path="/c/clients"
           component={Clients}

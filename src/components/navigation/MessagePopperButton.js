@@ -1,17 +1,6 @@
 import React, { Fragment, useState, useRef, useCallback } from "react";
 import PropTypes from "prop-types";
-import {
-  Popover,
-  IconButton,
-  AppBar,
-  List,
-  Divider,
-  ListItem,
-  ListItemText,
-  Typography,
-  Box,
-  withStyles,
-} from "@material-ui/core";
+import { Popover, IconButton, AppBar, List, Divider, ListItem, ListItemText, Typography, Box, withStyles } from "@material-ui/core";
 import MessageIcon from "@material-ui/icons/Message";
 import MessageListItem from "./MessageListItem";
 
@@ -51,6 +40,25 @@ function MessagePopperButton(props) {
   }, [setIsOpen]);
 
   const id = isOpen ? "scroll-playground" : null;
+
+  const noMessages = (
+    <ListItem>
+      <ListItemText>
+        Nada nuevo.
+      </ListItemText>
+    </ListItem>
+  );
+
+  const messagesList = (
+    messages.map((element, index) => (
+      <MessageListItem
+        key={index}
+        message={element}
+        divider={index !== messages.length - 1}
+      />
+    ))
+  );
+
   return (
     <Fragment>
       <IconButton
@@ -80,26 +88,12 @@ function MessagePopperButton(props) {
       >
         <AppBar position="static" color="inherit" className={classes.noShadow}>
           <Box pt={1} pl={2} pb={1} pr={1}>
-            <Typography variant="subtitle1">Messages</Typography>
+            <Typography variant="subtitle1">Avisos</Typography>
           </Box>
           <Divider className={classes.divider} />
         </AppBar>
         <List dense className={classes.tabContainer}>
-          {messages.length === 0 ? (
-            <ListItem>
-              <ListItemText>
-                You haven&apos;t received any messages yet.
-              </ListItemText>
-            </ListItem>
-          ) : (
-            messages.map((element, index) => (
-              <MessageListItem
-                key={index}
-                message={element}
-                divider={index !== messages.length - 1}
-              />
-            ))
-          )}
+          { messages.length === 0 ? noMessages : messagesList }
         </List>
       </Popover>
     </Fragment>

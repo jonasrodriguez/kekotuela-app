@@ -1,7 +1,7 @@
 export default class Order {
-    constructor(id, readableId, clientId, userId, userName, description, creationDate, orderDate, priority) {
+    constructor(id, reference, clientId, userId, userName, description, creationDate, orderDate, priority) {
         this.id = id;
-        this.readableId = readableId;
+        this.reference = reference;
         this.clientId = clientId;
         this.userId = userId;
         this.userName = userName;
@@ -13,7 +13,7 @@ export default class Order {
 
     fillOrderFromDb(db) {
         this.id = db._id;
-        this.readableId = db.readableId;
+        this.reference = db.reference;
         this.clientId = db.clientId;
         this.userId = db.userId;
         this.description = db.description;
@@ -24,4 +24,4 @@ export default class Order {
     }
 }
 
-export const EmptyOrder = new Order("", "", "", null, "", "", new Date(), null, 0);
+export const EmptyOrder = new Order("", "", "", null, "", "", new Date(), null, false);

@@ -1,13 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import {
-  Paper,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Box,
-  withStyles
-} from "@material-ui/core";
+import { Paper, DialogTitle, DialogContent, DialogActions, Box, withStyles } from "@material-ui/core";
 
 const styles = theme => ({
   helpPadding: {
@@ -22,36 +15,28 @@ const styles = theme => ({
 });
 
 function ActionPaper(props) {
-  const {
-    theme,
-    classes,
-    title,
-    content,
-    maxWidth,
-    actions,
-    helpPadding,
-    fullWidthActions
-  } = props;
+  const { theme, classes, title, content, maxWidth, actions, helpPadding, fullWidthActions } = props;
+
+  const contentDialog = (
+    <DialogContent classes={helpPadding ? { root: classes.helpPadding } : null} >
+      {content}
+    </DialogContent>
+  );
+
+  const contentAction = (
+    <Box pb={2} pr={2}>
+      <DialogActions classes={{ action: fullWidthActions ? classes.fullWidth : null }}>
+              {actions}
+      </DialogActions>
+    </Box>
+  );
+
   return (
     <Box pt={1}>
       <Paper style={{ maxWidth: theme.breakpoints.values[maxWidth] }}>
         {title && <DialogTitle>{title}</DialogTitle>}
-        {content && (
-          <DialogContent
-            classes={helpPadding ? { root: classes.helpPadding } : null}
-          >
-            {content}
-          </DialogContent>
-        )}
-        {actions && (
-          <Box pb={2} pr={2}>
-            <DialogActions
-              classes={{ action: fullWidthActions ? classes.fullWidth : null }}
-            >
-              {actions}
-            </DialogActions>
-          </Box>
-        )}
+        {content && contentDialog}
+        {actions && contentAction}
       </Paper>
     </Box>
   );

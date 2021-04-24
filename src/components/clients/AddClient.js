@@ -4,8 +4,8 @@ import { Button, Box } from "@material-ui/core";
 import ActionPaper from "../shared/ActionPaper";
 import ButtonCircularProgress from "../shared/ButtonCircularProgress";
 import AddClientOptions from "./AddClientOptions";
-import { Client, ClientInit, EmptyClient } from '../shared/models/Client'
-import { FetchClientList, PostNewClient } from '../shared/api/Client'
+import { Client, ClientInit, EmptyClient } from '../models/Client'
+import { FetchClientList, PostNewClient } from '../api/Client'
 
 function AddClient(props) {
   const { pushMessageToSnackbar, onClose } = props;
@@ -23,16 +23,6 @@ function AddClient(props) {
     newClient[prop] = value; 
     setClient(newClient);
   }, [client, setClient]);
-
-  /*const handlePost = useCallback(() => {
-    setLoading(true);
-    setTimeout(() => {
-      pushMessageToSnackbar({
-        text: "Your post has been uploaded",
-      });
-      onClose();
-    }, 1500);
-  }, [setLoading, onClose, pushMessageToSnackbar]);*/
 
   return (
     <Fragment>

@@ -2,34 +2,15 @@ import React, { Fragment, useRef, useCallback, useState } from "react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import classNames from "classnames";
-import {
-  AppBar,
-  Toolbar,
-  Typography,
-  Avatar,
-  Drawer,
-  List,
-  IconButton,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  Hidden,
-  Tooltip,
-  Box,
-  withStyles,
-  isWidthUp,
-  withWidth,
-} from "@material-ui/core";
+import { AppBar, Toolbar, Typography, Avatar, Drawer, IconButton, Hidden, Tooltip, Box, withStyles, isWidthUp, withWidth } from "@material-ui/core";
+import { List, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
 import DashboardIcon from "@material-ui/icons/Dashboard";
 import ImageIcon from "@material-ui/icons/Image";
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
-import AccountBalanceIcon from "@material-ui/icons/AccountBalance";
 import WorkIcon from '@material-ui/icons/Work';
 import MenuIcon from "@material-ui/icons/Menu";
-import SupervisorAccountIcon from "@material-ui/icons/SupervisorAccount";
+import BuildIcon from '@material-ui/icons/Build';
 import MessagePopperButton from "./MessagePopperButton";
-import SideDrawer from "./SideDrawer";
-import Balance from "./Balance";
 import NavigationDrawer from "../shared/NavigationDrawer";
 
 const styles = (theme) => ({
@@ -128,11 +109,10 @@ const styles = (theme) => ({
 });
 
 function NavBar(props) {
-  const { selectedTab, messages, classes, width, openAddBalanceDialog } = props;
+  const { selectedTab, messages, classes, width } = props;
   // Will be use to make website more accessible by screen readers
   const links = useRef([]);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
-  const [isSideDrawerOpen, setIsSideDrawerOpen] = useState(false);
 
   const openMobileDrawer = useCallback(() => {
     setIsMobileOpen(true);
@@ -142,24 +122,16 @@ function NavBar(props) {
     setIsMobileOpen(false);
   }, [setIsMobileOpen]);
 
-  const openDrawer = useCallback(() => {
-    setIsSideDrawerOpen(true);
-  }, [setIsSideDrawerOpen]);
-
-  const closeDrawer = useCallback(() => {
-    setIsSideDrawerOpen(false);
-  }, [setIsSideDrawerOpen]);
-
   const menuItems = [
     {
-      link: "/c/orders",
-      name: "Partes",
+      link: "/c/notes",
+      name: "Notas",
       onClick: closeMobileDrawer,
       icon: {
         desktop: (
           <DashboardIcon
             className={
-              selectedTab === "Partes" ? classes.textPrimary : "text-white"
+              selectedTab === "Notas" ? classes.textPrimary : "text-white"
             }
             fontSize="small"
           />
@@ -168,14 +140,14 @@ function NavBar(props) {
       },
     },
     {
-      link: "/c/posts",
-      name: "Posts",
+      link: "/c/orders",
+      name: "Albaranes",
       onClick: closeMobileDrawer,
       icon: {
         desktop: (
           <ImageIcon
             className={
-              selectedTab === "Posts" ? classes.textPrimary : "text-white"
+              selectedTab === "Albaranes" ? classes.textPrimary : "text-white"
             }
             fontSize="small"
           />
@@ -184,19 +156,19 @@ function NavBar(props) {
       },
     },
     {
-      link: "/c/subscription",
-      name: "Subscription",
+      link: "/c/materials",
+      name: "Materiales",
       onClick: closeMobileDrawer,
       icon: {
         desktop: (
-          <AccountBalanceIcon
+          <BuildIcon
             className={
-              selectedTab === "Subscription" ? classes.textPrimary : "text-white"
+              selectedTab === "Materiales" ? classes.textPrimary : "text-white"
             }
             fontSize="small"
           />
         ),
-        mobile: <AccountBalanceIcon className="text-white" />,
+        mobile: <BuildIcon className="text-white" />,
       },
     },
     {
@@ -272,15 +244,7 @@ function NavBar(props) {
             justifyContent="flex-end"
             alignItems="center"
             width="100%"
-          >
-            {isWidthUp("sm", width) && (
-              <Box mr={3}>
-                <Balance
-                  balance={2573}
-                  openAddBalanceDialog={openAddBalanceDialog}
-                />
-              </Box>
-            )}
+          >            
             <MessagePopperButton messages={messages} />
             <ListItem
               disableGutters
@@ -300,15 +264,7 @@ function NavBar(props) {
                 />
               )}
             </ListItem>
-          </Box>
-          <IconButton
-            onClick={openDrawer}
-            color="primary"
-            aria-label="Open Sidedrawer"
-          >
-            <SupervisorAccountIcon />
-          </IconButton>
-          <SideDrawer open={isSideDrawerOpen} onClose={closeDrawer} />
+          </Box>          
         </Toolbar>
       </AppBar>
       <Hidden xsDown>
@@ -380,7 +336,6 @@ NavBar.propTypes = {
   selectedTab: PropTypes.string.isRequired,
   width: PropTypes.string.isRequired,
   classes: PropTypes.object.isRequired,
-  openAddBalanceDialog: PropTypes.func.isRequired,
 };
 
 export default withWidth()(withStyles(styles, { withTheme: true })(NavBar));

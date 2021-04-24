@@ -4,7 +4,7 @@ import { List, Divider, Paper, withStyles } from "@material-ui/core";
 import ClientTable from "./ClientTable";
 import ClientInfo from "./ClientInfo";
 import AddClient from "./AddClient";
-import { FetchClientList } from '../shared/api/Client';
+import { FetchClientList } from '../api/Client';
 
 const styles = {
   divider: {

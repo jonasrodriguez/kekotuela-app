@@ -1,18 +1,18 @@
-const orderUri = "http://localhost:3001/orders"
+const uri = "/api/orders"
 
 export const FetchOrderList = (callback)=>{
-    fetch(orderUri)
+    fetch(uri)
     .then(res => res.json())
     .then((data) => { callback(data); })
 }
 
 export const GetUniqueReadableId = ()=>{
-    fetch(orderUri)
+    fetch(uri)
     .then(res => res.json())
 }
 
 export const PostNewOrder = (order, cb)=>{  
-    fetch(orderUri, {
+    fetch(uri, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',

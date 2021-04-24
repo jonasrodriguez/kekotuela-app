@@ -1,44 +1,27 @@
 import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
-import { List, Divider, Paper, withStyles } from "@material-ui/core";
-import OrderInfo from "./OrderInfo";
+import { Paper } from "@material-ui/core";
+import { FetchNoteList } from "../api/Notes"
+import AddOrder from "./AddOrder"
 import OrderTable from "./OrderTable";
-import AddOrder from "./AddOrder";
-import { FetchOrderList } from "../shared/api/Order"
 
-const styles = {
-  divider: {
-    backgroundColor: "rgba(0, 0, 0, 0.26)"
-  }
-};
+function Orders() {
+  const [notes, setNotes] = useState([]);  
+  const [isNewDiagOpen, setIsNewDiagOpen] = useState(false);
 
-function Orders(props) {
-  const classes = props;
-  const [orders, setOrders] = useState([]);  
+  useEffect(() => {FetchNoteList(setNotes);}, [setNotes]);
 
-  useEffect(() => {FetchOrderList(setOrders);}, [setOrders]); 
-
-  const [isNewOrderOpen, setIsNewOrderOpen] = useState(false);
-
-  if (isNewOrderOpen) {
+  if (isNewDiagOpen) {
     return (
       <Paper>
-        <AddOrder onClose={()=>{setIsNewOrderOpen(false)}} />
+        <AddOrder onClose={()=>{setIsNewDiagOpen(false)}} />
       </Paper>
     );
   }
   return (
     <Paper>
-      <List disablePadding>
-        <OrderInfo openNewOrder={()=>{setIsNewOrderOpen(true)}} />
-        <OrderTable orders={orders} />
-      </List>  
+      <OrderTable notes={notes} onNewButtonClick={()=>{setIsNewDiagOpen(true)}} />
     </Paper>    
   );
 }
 
-Orders.propTypes = {
-  classes: PropTypes.object.isRequired
-};
-
-export default withStyles(styles)(Orders);
+export default Notes;

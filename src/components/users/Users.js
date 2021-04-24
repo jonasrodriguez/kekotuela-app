@@ -1,6 +1,7 @@
 import React, { useCallback, useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { List, Divider, Paper, withStyles } from "@material-ui/core";
+import { FetchUsersList } from "../api/User"
 import UserTable from "./UserTable";
 import UserInfo from "./UserInfo";
 import AddUser from "./AddUser";
@@ -16,13 +17,7 @@ function Users(props) {
   const [users, setUsers] = useState([]);  
   const [isAddUserOpen, setIsAddUserOpen] = useState(false);
 
-  const fetchUserList = useCallback(() => {
-    fetch('http://localhost:3001/users')
-    .then(res => res.json())
-    .then((data) => { setUsers(data); })  
-  }, [setUsers]);
-
-  useEffect(() => {fetchUserList();}, [fetchUserList]);
+  useEffect(() => { FetchUsersList(setUsers) }, [setUsers]);
 
   const openAddUserModal = useCallback(() => {
     setIsAddUserOpen(true);
