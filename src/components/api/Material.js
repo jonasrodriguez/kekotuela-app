@@ -1,6 +1,6 @@
 import Auth from '../shared/Auth'
 
-const uri = "/api/materials"
+const uri = process.env.REACT_APP_BACK_END + "/api/materials"
 
 export const FetchMaterialList = (callback)=>{
   if(!Auth.loginStatus) {return;}

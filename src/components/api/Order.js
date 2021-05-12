@@ -1,6 +1,6 @@
 import Auth from '../shared/Auth'
 
-const uri = "/api/orders"
+const uri = process.env.REACT_APP_BACK_END + "/api/orders"
 
 export const FetchOrderList = (callback)=>{
   if(!Auth.loginStatus) { return; }

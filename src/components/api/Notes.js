@@ -1,6 +1,6 @@
 import Auth from '../shared/Auth'
 
-const uri = "/api/notes"
+const uri = process.env.REACT_APP_BACK_END + "/api/notes"
 
 export const FetchNoteList = (callback)=>{
   if(!Auth.loginStatus) { return; }

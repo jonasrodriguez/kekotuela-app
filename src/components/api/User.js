@@ -1,6 +1,6 @@
 import Auth from '../shared/Auth'
 
-const uri = "/api/users"
+const uri = process.env.REACT_APP_BACK_END + "/api/users"
 
 export const Login = (username, password, callback) => {
     fetch(uri+"/login", {

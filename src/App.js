@@ -7,7 +7,7 @@ import Pace from "./components/shared/Pace";
 
 const Main = lazy(() => import("./components/Main"));
 
-function App() {
+function App() {  
   return (
     <BrowserRouter>
       <MuiThemeProvider theme={theme}>
