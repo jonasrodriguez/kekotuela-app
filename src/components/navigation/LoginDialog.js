@@ -90,7 +90,7 @@ function LoginDialog(props) {
   }, [setIsLoading]);
 
   return (
-    <Dialog  open={open} onClose={onClose} disableBackdropClick={isLoading} disableEscapeKeyDown={isLoading}
+    <Dialog  open={open} onClose={onClose} disableBackdropClick disableEscapeKeyDown
       classes={{ paper: classes.dialogPaper, paperScrollPaper: classes.dialogPaperScrollPaper }}
     >
       <DialogTitle disableTypography>
