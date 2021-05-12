@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { Box, Button, Divider, List, ListItemText, Toolbar, Paper, Typography, Grid, withStyles } from "@material-ui/core";
 import HighlightedInformation from "../shared/HighlightedInformation"
 import Pagination from "../shared/Pagination"
+import RowControls from "../shared/RowControls"
 
 const rowsPerPage = 25;
 
@@ -59,6 +60,9 @@ function OrderTable(props) {
                         <Typography variant="body2" color="textSecondary">
                             {order.note.client.address}. {order.note.client.city}, {order.note.client.cp}
                         </Typography>
+                    </Grid>
+                    <Grid item>
+                        <RowControls />
                     </Grid>
                 </Grid>
               </Paper>

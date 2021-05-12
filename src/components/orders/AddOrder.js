@@ -49,11 +49,11 @@ function AddOrder(props) {
 
   const handlePost = useCallback((response) => {
     if (response.status === 200) {
-      mainSnackBar({ text: "Orden guardada correctamente.", isErrorMessage: false});
+      mainSnackBar({ text: "Orden guardada correctamente.", isError: false});
       onClose();
     }
     else {
-      mainSnackBar({ text: "Error al guardar la nota!", isErrorMessage: true});
+      mainSnackBar({ text: "Error al guardar la nota!", isError: true});
     }
   }, [onClose]);
 

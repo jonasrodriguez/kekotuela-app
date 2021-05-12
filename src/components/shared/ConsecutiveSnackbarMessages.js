@@ -1,6 +1,7 @@
 import React, { useCallback, useState, useRef, useEffect } from "react";
 import PropTypes from "prop-types";
 import { Snackbar, withStyles } from "@material-ui/core";
+import MuiAlert from '@material-ui/lab/Alert';
 
 const styles = (theme) => ({
   root: {
@@ -10,10 +11,15 @@ const styles = (theme) => ({
   },
 });
 
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
 function ConsecutiveSnackbars(props) {
   const { classes, getMessageToSnackBar } = props;
   const [isOpen, setIsOpen] = useState(false);
   const [messageInfo, setMessageInfo] = useState({});
+  
   const queue = useRef([]);
 
   const processQueue = useCallback(() => {
@@ -31,10 +37,7 @@ function ConsecutiveSnackbars(props) {
   }, [setIsOpen]);
 
   const pushMessage = useCallback(message => {
-    queue.current.push({
-      message,
-      key: new Date().getTime(),
-    });
+    queue.current.push({ key: new Date().getTime(), message });
     if (isOpen) {
       // immediately begin dismissing current message
       // to start showing new one
@@ -44,9 +47,14 @@ function ConsecutiveSnackbars(props) {
     }
   }, [queue, isOpen, setIsOpen, processQueue]);
 
-  useEffect(() => {
-    getMessageToSnackBar(pushMessage);
+  useEffect(() => { getMessageToSnackBar(pushMessage);
   }, [getMessageToSnackBar, pushMessage]);
+
+  const isError =  messageInfo.message ? messageInfo.message.isError : true;
+  const messageText = messageInfo.message ? messageInfo.message.text : null;
+
+  const errorBar = (<Alert severity="error">{messageText}</Alert>);
+  const successBar = (<Alert severity="success">{messageText}</Alert>);
 
   return (
     <Snackbar
@@ -57,18 +65,16 @@ function ConsecutiveSnackbars(props) {
         horizontal: "left",
       }}
       open={isOpen}
-      autoHideDuration={6000}
+      autoHideDuration={2000}
       onClose={handleClose}
       onExited={processQueue}
       ContentProps={{
         classes: {
           root: classes.root,
         },
-      }}
-      message={
-        <span>{messageInfo.message ? messageInfo.message.text : null}</span>
-      }
-    />
+      }}>
+        {isError ? errorBar : successBar}
+      </Snackbar>
   );
 }
 

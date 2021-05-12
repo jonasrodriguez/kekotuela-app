@@ -17,6 +17,7 @@ export const PostNewMaterial = (order, cb)=>{
       'Accept': 'application/json',
       'Content-Type': 'application/json',
       'Access-Control-Allow-Origin':'*',
+      'Authorization': 'Bearer ' + Auth.token
     },
     body: JSON.stringify(order)})
   .then((data) => { cb(data); })

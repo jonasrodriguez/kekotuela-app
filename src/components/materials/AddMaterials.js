@@ -1,16 +1,14 @@
 import React, { Fragment, useState, useCallback } from "react";
 import PropTypes from "prop-types";
-import { Button, Box, Grid, TextField, Typography, Snackbar } from "@material-ui/core";
+import { Button, Box, Grid, TextField, Typography } from "@material-ui/core";
 import ActionPaper from "../shared/ActionPaper";
 import ButtonCircularProgress from "../shared/ButtonCircularProgress";
-import SnackbarError from "../shared/SnackbarError";
 import { EmptyMaterial } from '../models/Material'
 import { PostNewMaterial } from '../api/Material'
 
 function AddMaterials(props) {
-  const { parentSnackbar, onClose } = props;
+  const { mainSnackBar, onClose } = props;
   const material = EmptyMaterial;
-  const [errorSnack, setErrorSnack] = useState(false);
   const [name, setName] = useState(material.name);
   const [price, setPrice] = useState(material.price);
   const [description, setDescription] = useState(material.description);
@@ -18,8 +16,7 @@ function AddMaterials(props) {
 
   const handlePost = useCallback((response) => {    
     material.clearMaterial();
-    parentSnackbar.message="Material añadido correctamente."
-    parentSnackbar.open=true
+    mainSnackBar({ text: "Material añadido correctamente.", isError: false });
     onClose();
   }, [onClose]); 
   
@@ -76,7 +73,6 @@ function AddMaterials(props) {
           </Fragment>
         }
       />
-      <SnackbarError message="Error al guardar el material!" open={errorSnack} onClose={()=>{setErrorSnack(false);}}/>
     </Fragment>
   );
 }

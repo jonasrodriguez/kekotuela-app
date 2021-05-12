@@ -50,11 +50,11 @@ function AddNote(props) {
 
   const handlePost = useCallback((response) => {
     if (response.status === 200) {
-      mainSnackBar({ text: "Nota guardada correctamente.", isErrorMessage: false });
+      mainSnackBar({ text: "Nota guardada correctamente.", isError: false });
       onClose();
     }
     else {
-      mainSnackBar({ text: "Error al guardar la nota!", isErrorMessage: false });
+      mainSnackBar({ text: "Error al guardar la nota!", isError: false });
     }
   }, [onClose]);
 

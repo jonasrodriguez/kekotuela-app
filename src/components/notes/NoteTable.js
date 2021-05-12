@@ -2,6 +2,7 @@ import React, { useCallback, useState } from "react";
 import PropTypes from "prop-types";
 import { Box, Grid, Paper, TextField, Typography, withStyles } from "@material-ui/core";
 import { Divider, List, ListItemText, Toolbar, Button } from "@material-ui/core";
+import RowControls from "../shared/RowControls"
 import Pagination from "../shared/Pagination"
 import HighlightedInformation from "../shared/HighlightedInformation";
 
@@ -37,7 +38,7 @@ const styles = theme => ({
 const rowsPerPage = 25;
 
 function NoteTable(props) {
-  const { notes, classes, openNewNote } = props;
+  const { classes, notes, openNewNote, updateNote, deleteNote } = props;
   const [page, setPage] = useState(0);
 
   const handleChangePage = useCallback((_, page) => { 
@@ -79,6 +80,9 @@ function NoteTable(props) {
             <Grid item> 
               <TextField label="Fecha prevista" value={note.orderDate} InputProps={{ readOnly: true, }} variant="outlined" size="small" />
             </Grid>
+            <Grid item> 
+              <RowControls updateItem={() => updateNote(index)} deleteItem={() => deleteNote(index)} />
+            </Grid>            
           </Grid>
         </Paper>
       ))}      
@@ -104,7 +108,9 @@ NoteTable.propTypes = {
   theme: PropTypes.object.isRequired,
   classes: PropTypes.object.isRequired,
   notes: PropTypes.arrayOf(PropTypes.object).isRequired,
-  openNewNote: PropTypes.func.isRequired
+  openNewNote: PropTypes.func.isRequired,
+  updateNote: PropTypes.func.isRequired,
+  deleteNote: PropTypes.func.isRequired,  
 };
 
 export default withStyles(styles, { withTheme: true })(NoteTable);

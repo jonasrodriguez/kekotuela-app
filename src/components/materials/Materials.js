@@ -7,14 +7,13 @@ import AddMaterials from "./AddMaterials";
 import { FetchMaterialList } from "../api/Material"
 
 function Materials(props) {
+  const { mainSnackBar } = props;
   const [isNewMaterialOpen, setIsNewMaterialOpen] = useState(false);  
   const [materials, setMaterials] = useState([]);
-  const [snackBar, setSnackBar] = useState({open:false, message:'None'});
 
   useEffect(() => {FetchMaterialList(setMaterials);}, [setMaterials]);
 
-  const onNewMaterialClose = () => {   
-    console.log("onNewMaterialClose");
+  const onModalClose = () => {   
     setIsNewMaterialOpen(false);
     FetchMaterialList(setMaterials);
   } 
@@ -22,20 +21,19 @@ function Materials(props) {
   if (isNewMaterialOpen) {
     return (
       <Paper>
-        <AddMaterials parentSnackbar={snackBar} onClose={onNewMaterialClose} />
+        <AddMaterials mainSnackBar={mainSnackBar} onClose={onModalClose} />
       </Paper>
     );
   }
   return (
     <Paper>
       <MaterialsTable materials={materials} onNewButtonClick={()=>{setIsNewMaterialOpen(true)}} />
-      <SnackbarError message={snackBar.message} open={snackBar.open} />
     </Paper>    
   );
 }
 
 Materials.propTypes = {
-  classes: PropTypes.object.isRequired
+  mainSnackBar: PropTypes.func
 }
 
 export default Materials;

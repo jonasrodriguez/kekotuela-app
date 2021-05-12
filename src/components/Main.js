@@ -25,14 +25,12 @@ function Main(props) {
   const { classes } = props;
   const [openLoginDialog, setOpenLoginDialog] = useState(true);
   const [openNavDrawer, setOpenNavDrawer] = useState(false);
-  const [mainSnackBar, setMainSnackBar] = useState(null);
+  const [mainSnackBar, setMainSnackBar] = useState([]);
 
   const getMessageToSnackBar = useCallback(
     (pushMessage) => {
       setMainSnackBar(() => pushMessage);
-    },
-    [setMainSnackBar]
-  );
+  },[setMainSnackBar]);
 
   return (
     <Fragment>

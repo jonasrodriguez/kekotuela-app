@@ -18,15 +18,9 @@ function PhotoSelector(props) {
   const onDrop = useCallback(
     (acceptedFiles, rejectedFiles) => {
       if (acceptedFiles.length + rejectedFiles.length > 1) {
-        mainSnackBar({
-          isErrorMessage: true,
-          text: "No se puede subir mas de un fichero a la vez",
-        });
+        mainSnackBar({ text: "No se puede subir mas de un fichero a la vez", isError: true });
       } else if (acceptedFiles.length === 0) {
-        mainSnackBar({
-          isErrorMessage: true,
-          text: "El fichero que quiere subir no es una imagen",
-        });
+        mainSnackBar({ text: "El fichero que quiere subir no es una imagen", isError: true });
       } else if (acceptedFiles.length === 1) {
         const file = acceptedFiles[0];
         file.preview = URL.createObjectURL(file);

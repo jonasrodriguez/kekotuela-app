@@ -9,12 +9,17 @@ function Orders(props) {
   const [orders, setOrders] = useState([]);  
   const [isNewDiagOpen, setIsNewDiagOpen] = useState(false);
 
-  useEffect(() => {FetchOrderList(setOrders);}, [setOrders]);
+  useEffect(() => {FetchOrderList(setOrders)}, [setOrders]);
+
+  const onDiagClose = () => {   
+    setIsNewDiagOpen(false);
+    FetchOrderList(setOrders);
+  } 
 
   if (isNewDiagOpen) {
     return (
       <Paper>
-        <AddOrder mainSnackBar={mainSnackBar} onClose={()=>{setIsNewDiagOpen(false)}} />
+        <AddOrder mainSnackBar={mainSnackBar} onClose={onDiagClose} />
       </Paper>
     );
   }

@@ -22,3 +22,15 @@ export const PostNewNote = (order, cb)=>{
     body: JSON.stringify(order)})
   .then((data) => { cb(data); })
 }
+
+export const DeleteNoteById = (id, callback)=>{
+  if(!Auth.loginStatus) { return; }
+  fetch(uri+"/"+id, {
+    method: 'DELETE',
+    headers: {
+      'Access-Control-Allow-Origin':'*',
+      'Authorization': 'Bearer ' + Auth.token
+    }
+  })
+  .then(response => callback(response));
+}

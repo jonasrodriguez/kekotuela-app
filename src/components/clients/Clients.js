@@ -22,8 +22,9 @@ function Clients(props) {
   }, [setIsAddClientOpen]);
 
   const closeAddClientModal = useCallback(() => {
+    FetchClientList(setClients);
     setIsAddClientOpen(false);
-  }, [setIsAddClientOpen]);
+  }, [setClients, setIsAddClientOpen]);
 
   useEffect(() => {FetchClientList(setClients);}, [setClients]);  
 

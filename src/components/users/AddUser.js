@@ -14,7 +14,6 @@ function AddClient(props) {
   const [loading, setLoading] = useState(false);
 
   const handlePost = useCallback((response) => {
-    console.log(response.json());
     onClose();
   }, [onClose]);
 
