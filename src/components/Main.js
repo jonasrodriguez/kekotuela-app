@@ -24,6 +24,7 @@ const styles = (theme) => ({
 function Main(props) {
   const { classes } = props;
   const [openLoginDialog, setOpenLoginDialog] = useState(true);
+  const [openNavDrawer, setOpenNavDrawer] = useState(false);
   const [mainSnackBar, setMainSnackBar] = useState(null);
 
   const getMessageToSnackBar = useCallback(
@@ -36,8 +37,8 @@ function Main(props) {
   return (
     <Fragment>
       <LoginDialog open={openLoginDialog} onClose={() => setOpenLoginDialog(false)} />
-      <TopBar messages={[]} />
-      <NavBar selectedTab={null} />
+      <TopBar messages={[]} setOpenNavDrawer={setOpenNavDrawer} />
+      <NavBar selectedTab={null} openNavDrawer={openNavDrawer} setOpenNavDrawer={setOpenNavDrawer} />
       <ConsecutiveSnackbarMessages getMessageToSnackBar={getMessageToSnackBar} />
       <main className={classNames(classes.main)}>
         <Routing mainSnackBar={mainSnackBar}/>

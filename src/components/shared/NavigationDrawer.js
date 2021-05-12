@@ -1,19 +1,7 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import {
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  Drawer,
-  withStyles,
-  IconButton,
-  Typography,
-  withWidth,
-  isWidthUp,
-  Toolbar
-} from "@material-ui/core";
+import { List, ListItem, ListItemIcon, ListItemText, Drawer, withStyles, IconButton, Typography, withWidth, isWidthUp, Toolbar } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 
 const styles = theme => ({
@@ -33,16 +21,7 @@ const styles = theme => ({
 });
 
 function NavigationDrawer(props) {
-  const {
-    width,
-    open,
-    onClose,
-    anchor,
-    classes,
-    menuItems,
-    selectedItem,
-    theme
-  } = props;
+  const { width, open, onClose, anchor, classes, menuItems, selectedItem, theme  } = props;
 
   useEffect(() => {
     window.onresize = () => {

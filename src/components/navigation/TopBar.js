@@ -78,17 +78,11 @@ const styles = (theme) => ({
 });
 
 function TopBar(props) {
-  const { classes, messages, width } = props;
-  const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const { classes, messages, width, setOpenNavDrawer } = props;
 
   const openMobileDrawer = useCallback(() => {
-    setIsMobileOpen(true);
-  }, [setIsMobileOpen]);
-
-  const closeMobileDrawer = useCallback(() => {
-    setIsMobileOpen(false);
-  }, [setIsMobileOpen]);
-
+    setOpenNavDrawer(true);
+  }, [setOpenNavDrawer]);
   
   return (
     <Fragment>

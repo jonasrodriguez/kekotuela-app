@@ -105,22 +105,13 @@ const styles = (theme) => ({
 });
 
 function NavBar(props) {
-  const { classes, selectedTab } = props;
+  const { classes, selectedTab, openNavDrawer, setOpenNavDrawer } = props;
   // Will be use to make website more accessible by screen readers
   const links = useRef([]);
-  const [isMobileOpen, setIsMobileOpen] = useState(false);
-
-  const handleLogin = useCallback((username, token) => {
-    console.log(username, token);
-  });
-
-  const openMobileDrawer = useCallback(() => {
-    setIsMobileOpen(true);
-  }, [setIsMobileOpen]);
 
   const closeMobileDrawer = useCallback(() => {
-    setIsMobileOpen(false);
-  }, [setIsMobileOpen]);
+    setOpenNavDrawer(false);
+  }, [setOpenNavDrawer]);
 
   const menuItems = [
     {
@@ -262,7 +253,7 @@ function NavBar(props) {
           onClick: element.onClick,
         }))}
         anchor="left"
-        open={isMobileOpen}
+        open={openNavDrawer}
         selectedItem={selectedTab}
         onClose={closeMobileDrawer}
       />
