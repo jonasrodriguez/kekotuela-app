@@ -1,16 +1,12 @@
 import React, { Fragment, useRef, useCallback, useState } from "react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
-import classNames from "classnames";
-import { AppBar, Toolbar, Typography, Avatar, Drawer, IconButton, Hidden, Tooltip, Box, withStyles, isWidthUp, withWidth } from "@material-ui/core";
-import { List, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
+import { List, ListItem, ListItemIcon, Drawer, Hidden, Tooltip, withStyles, withWidth } from "@material-ui/core";
 import DashboardIcon from "@material-ui/icons/Dashboard";
 import ImageIcon from "@material-ui/icons/Image";
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 import WorkIcon from '@material-ui/icons/Work';
-import MenuIcon from "@material-ui/icons/Menu";
 import BuildIcon from '@material-ui/icons/Build';
-import MessagePopperButton from "./MessagePopperButton";
 import NavigationDrawer from "../shared/NavigationDrawer";
 
 const styles = (theme) => ({
@@ -109,10 +105,14 @@ const styles = (theme) => ({
 });
 
 function NavBar(props) {
-  const { selectedTab, messages, classes, width } = props;
+  const { classes, selectedTab } = props;
   // Will be use to make website more accessible by screen readers
   const links = useRef([]);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
+
+  const handleLogin = useCallback((username, token) => {
+    console.log(username, token);
+  });
 
   const openMobileDrawer = useCallback(() => {
     setIsMobileOpen(true);
@@ -141,13 +141,13 @@ function NavBar(props) {
     },
     {
       link: "/c/orders",
-      name: "Albaranes",
+      name: "Partes",
       onClick: closeMobileDrawer,
       icon: {
         desktop: (
           <ImageIcon
             className={
-              selectedTab === "Albaranes" ? classes.textPrimary : "text-white"
+              selectedTab === "Partes" ? classes.textPrimary : "text-white"
             }
             fontSize="small"
           />
@@ -206,67 +206,6 @@ function NavBar(props) {
   ];
   return (
     <Fragment>
-      <AppBar position="sticky" className={classes.appBar}>
-        <Toolbar className={classes.appBarToolbar}>
-          <Box display="flex" alignItems="center">
-            <Hidden smUp>
-              <Box mr={1}>
-                <IconButton
-                  aria-label="Open Navigation"
-                  onClick={openMobileDrawer}
-                  color="primary"
-                >
-                  <MenuIcon />
-                </IconButton>
-              </Box>
-            </Hidden>  
-            <Hidden xsDown>
-              <Typography
-                variant="h4"
-                className={classes.brandText}
-                display="inline"
-                color="primary"
-              >
-                Koke
-              </Typography>
-              <Typography
-                variant="h4"
-                className={classes.brandText}
-                display="inline"
-                color="secondary"
-              >
-                Tuela
-              </Typography>
-            </Hidden>
-          </Box>
-          <Box
-            display="flex"
-            justifyContent="flex-end"
-            alignItems="center"
-            width="100%"
-          >            
-            <MessagePopperButton messages={messages} />
-            <ListItem
-              disableGutters
-              className={classNames(classes.iconListItem, classes.smBordered)}
-            >
-              <Avatar
-                alt="profile picture"
-                src={`${process.env.PUBLIC_URL}/images/logged_in/profilePicture.jpg`}
-                className={classNames(classes.accountAvatar)}
-              />
-              {isWidthUp("sm", width) && (
-                <ListItemText
-                  className={classes.username}
-                  primary={
-                    <Typography color="textPrimary">Username</Typography>
-                  }
-                />
-              )}
-            </ListItem>
-          </Box>          
-        </Toolbar>
-      </AppBar>
       <Hidden xsDown>
         <Drawer //  both drawers can be combined into one for performance
           variant="permanent"
@@ -332,8 +271,7 @@ function NavBar(props) {
 }
 
 NavBar.propTypes = {
-  messages: PropTypes.arrayOf(PropTypes.object).isRequired,
-  selectedTab: PropTypes.string.isRequired,
+  //selectedTab: PropTypes.string.isRequired,
   width: PropTypes.string.isRequired,
   classes: PropTypes.object.isRequired,
 };

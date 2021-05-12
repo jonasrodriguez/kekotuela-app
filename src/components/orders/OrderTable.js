@@ -1,14 +1,23 @@
 import React, { useState, useCallback } from "react";
 import PropTypes from "prop-types";
-import { Box, Button, Divider, List, ListItemText, Toolbar, Paper, withStyles } from "@material-ui/core";
-import { Table, TableRow, TableBody, TableCell } from "@material-ui/core";
+import { Box, Button, Divider, List, ListItemText, Toolbar, Paper, Typography, Grid, withStyles } from "@material-ui/core";
 import HighlightedInformation from "../shared/HighlightedInformation"
 import Pagination from "../shared/Pagination"
 
 const rowsPerPage = 25;
 
-function NoteTable(props) {
-    const { classes, notes, onNewButtonClick } = props;
+const styles = theme => ({
+    tableWrapper: {
+      width: "100%"
+    },
+    paper: {
+        padding: theme.spacing(2),
+        margin: 'auto',
+    },
+})
+
+function OrderTable(props) {
+    const { classes, orders, onNewButtonClick } = props;
     const [page, setPage] = useState(0);
 
     const handleChangePage = useCallback((_, page) => { 
@@ -18,29 +27,43 @@ function NoteTable(props) {
     const emptyTable = (
         <Box>
             <HighlightedInformation>
-                No hay albaranes en el sistema.
+                No hay partes en el sistema.
             </HighlightedInformation>
         </Box> 
     );
 
     const contentTable = (
-        <TableBody>
-        {notes
-            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            .map((note, index) => (
-            <TableRow hover tabIndex={-1} key={index}>
-                <TableCell component="th" scope="row">
-                {note.reference}
-                </TableCell>
-                <TableCell component="th" scope="row">
-                {note.price}
-                </TableCell>
-                <TableCell component="th" scope="row">
-                {note.comment}
-                </TableCell>                                
-            </TableRow>
+        <Box className={classes.tableWrapper}>
+        {orders.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            .map((order, index) => (
+                <Paper variant="outlined" className={classes.paper} key={index}>
+                <Grid container spacing={2}>
+                    <Grid item xs={2}>
+                        <Typography variant="body2" color="textSecondary">{order.reference}</Typography>
+                    </Grid>
+                    <Grid item xs={4}>                  
+                        <Typography variant="body2" gutterBottom>
+                            {order.note.description}
+                        </Typography>
+                        <Typography variant="body2" color="textSecondary" gutterBottom>
+                            Total: {order.total} €
+                        </Typography>
+                    </Grid>
+                    <Grid item xs={4}>                  
+                        <Typography variant="body2" gutterBottom>
+                            {order.note.client.name} {order.note.client.surname} {order.note.client.second_surname}
+                        </Typography>
+                        <Typography variant="body2" color="textSecondary" gutterBottom>
+                            {order.note.client.phone} - {order.note.client.email}
+                        </Typography>
+                        <Typography variant="body2" color="textSecondary">
+                            {order.note.client.address}. {order.note.client.city}, {order.note.client.cp}
+                        </Typography>
+                    </Grid>
+                </Grid>
+              </Paper>
             ))}
-        </TableBody> 
+        </Box>
     );
 
     return (
@@ -49,23 +72,21 @@ function NoteTable(props) {
                 <Toolbar>
                     <ListItemText primary="Lista de partes" />
                     <Button variant="contained" color="secondary" disableElevation onClick={onNewButtonClick}>
-                        Añadir material
+                        Añadir parte
                     </Button>
                 </Toolbar>
                 <Divider/>
                 <Box>
-                    <Table aria-labelledby="tableTitle">
-                        {notes.length ? contentTable : emptyTable }
-                    </Table>
-                    <Pagination items={notes} rowsPerPage={rowsPerPage} page={page} handleChangePage={handleChangePage} />
+                    {orders.length ? contentTable : emptyTable }
+                    <Pagination items={orders} rowsPerPage={rowsPerPage} page={page} handleChangePage={handleChangePage} />
                 </Box>                
             </List>
         </Paper>    
     );
 }
 
-NoteTable.propTypes = {
+OrderTable.propTypes = {
     classes: PropTypes.object.isRequired
 };
 
-export default NoteTable;
+export default withStyles(styles, { withTheme: true })(OrderTable);

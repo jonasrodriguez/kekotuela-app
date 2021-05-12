@@ -78,7 +78,7 @@ function MaterialsTable(props) {
                 {material.price}
                 </TableCell>
                 <TableCell component="th" scope="row">
-                {material.comment}
+                {material.reference}
                 </TableCell>                                
             </TableRow>
             ))}

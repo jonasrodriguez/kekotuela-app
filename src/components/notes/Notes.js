@@ -1,16 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Paper, withStyles } from "@material-ui/core";
+import { Paper } from "@material-ui/core";
 import NoteTable from "./NoteTable";
 import AddNote from "./AddNote";
 import { FetchNoteList } from "../api/Notes"
 
-const styles = {
-  divider: {
-    backgroundColor: "rgba(0, 0, 0, 0.26)"
-  }
-};
-
-function Notes() {
+function Notes(props) {
+  const { mainSnackBar } = props;
   const [notes, setNotes] = useState([]);  
 
   useEffect(() => {FetchNoteList(setNotes);}, [setNotes]);
@@ -20,7 +15,7 @@ function Notes() {
   if (isNewDiagOpen) {
     return (
       <Paper>
-        <AddNote onClose={()=>{setIsNewDiagOpen(false)}} />
+        <AddNote onClose={()=>{setIsNewDiagOpen(false)}} mainSnackBar={mainSnackBar} />
       </Paper>
     );
   }
@@ -31,4 +26,4 @@ function Notes() {
   );
 }
 
-export default withStyles(styles)(Notes);
+export default Notes;

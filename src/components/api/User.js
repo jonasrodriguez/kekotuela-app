@@ -1,7 +1,29 @@
+import Auth from '../shared/Auth'
+
 const uri = "/api/users"
 
+export const Login = (username, password, callback) => {
+    fetch(uri+"/login", {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin':'*'
+        },
+        body: JSON.stringify({
+            'username': username,
+            'password': password
+        })
+    })        
+    .then(res => res.json())
+    .then((data) => { callback(data); })
+    .catch(() => callback(null))
+}
+
 export const FetchUsersList = (callback)=>{
-    fetch(uri)
+    if(!Auth.loginStatus) { return; }
+    
+    fetch(uri, {headers : {'Authorization': 'Bearer ' + Auth.token}})
     .then(res => res.json())
     .then((data) => { callback(data); })
 }

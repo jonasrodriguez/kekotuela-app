@@ -55,29 +55,30 @@ function NoteTable(props) {
   const contentTable = (
     <Box className={classes.tableWrapper}>
       {notes.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-        .map((order, index) => (
-        <Paper variant="outlined" className={classes.paper}>
+        .map((note, index) => (
+        <Paper variant="outlined" className={classes.paper} key={index}>
           <Grid container spacing={2}>
-            <Grid item xs={2}>
-              <Typography variant="body2" color="textSecondary">{order.reference}</Typography>
+            <Grid item xs={3}>
+              <Typography variant="body2" color="textSecondary">{note.reference}</Typography>
+              <Typography variant="body2" gutterBottom> {note.description}</Typography>
             </Grid>
-              <Grid item xs={4}>                  
-                <Typography variant="body2" gutterBottom>
-                  {order.client.name} {order.client.surname} {order.client.second_surname}
-                </Typography>
-                <Typography variant="body2" color="textSecondary" gutterBottom>
-                  {order.client.phone} - {order.client.email}
-                </Typography>
-                <Typography variant="body2" color="textSecondary">
-                  {order.client.address}. {order.client.city}, {order.client.cp}
-                </Typography>
-              </Grid>                
-              <Grid item> 
-                  <TextField label="Operario asignado" value={order.user ? order.user.userName : ''} InputProps={{ readOnly: true, }} variant="outlined" size="small" />
-              </Grid>
-              <Grid item> 
-                <TextField label="Fecha prevista" value={order.orderDate} InputProps={{ readOnly: true, }} variant="outlined" size="small" />
-              </Grid>
+            <Grid item xs={4}>                  
+              <Typography variant="body2" gutterBottom>
+                {note.client.name} {note.client.surname} {note.client.second_surname}
+              </Typography>
+              <Typography variant="body2" color="textSecondary" gutterBottom>
+                {note.client.phone} - {note.client.email}
+              </Typography>
+              <Typography variant="body2" color="textSecondary">
+                {note.client.address}. {note.client.city}, {note.client.cp}
+              </Typography>
+            </Grid>                
+            <Grid item> 
+                <TextField label="Operario asignado" value={note.user ? note.user.userName : ''} InputProps={{ readOnly: true, }} variant="outlined" size="small" />
+            </Grid>
+            <Grid item> 
+              <TextField label="Fecha prevista" value={note.orderDate} InputProps={{ readOnly: true, }} variant="outlined" size="small" />
+            </Grid>
           </Grid>
         </Paper>
       ))}      

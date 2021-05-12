@@ -1,27 +1,28 @@
 export default class Order {
-    constructor(id, reference, clientId, userId, userName, description, creationDate, orderDate, priority) {
+    constructor(id, reference, noteId, materials, photoBefore, photoAfter, comments, signClient, signUser) {
         this.id = id;
         this.reference = reference;
-        this.clientId = clientId;
-        this.userId = userId;
-        this.userName = userName;
-        this.description = description;
-        this.creationDate = creationDate;
-        this.orderDate = orderDate;
-        this.priority = priority;
+        this.noteId = noteId;
+        this.materials = materials;
+        this.photoBefore = photoBefore;
+        this.photoAfter = photoAfter;
+        this.comments = comments;
+        this.signClient = signClient;
+        this.signUser = signUser;
     }
 
     fillOrderFromDb(db) {
         this.id = db._id;
         this.reference = db.reference;
-        this.clientId = db.clientId;
-        this.userId = db.userId;
-        this.description = db.description;
-        this.userName = db.user.userName;
-        this.creationDate = db.createdAt;
-        this.orderDate = db.orderDate;
-        this.priority = db.priority;
+        this.noteId = db.noteId;
+        this.materials = db.materials;
+        this.photoBefore = db.photoBefore;
+        this.photoAfter = db.photoAfter;
+        this.comments = db.comments;
+        this.signClient = db.signClient;
+        this.signUser = db.signUser
     }
 }
 
-export const EmptyOrder = new Order("", "", "", null, "", "", new Date(), null, false);
+//export const EmptyOrder = new Order(  "", "", null, [], [], [], "", "", "");
+export const EmptyOrder = {id: "", reference: "", noteId: null, materials: [], photoBefore: [], photoAfter: [], comments: "", signClient: "", signUser: ""};

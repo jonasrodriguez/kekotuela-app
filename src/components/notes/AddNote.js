@@ -1,162 +1,191 @@
-import React, { Fragment, useState, useCallback, useEffect } from "react";
+import React, { Fragment, useState, useCallback } from "react";
 import PropTypes from "prop-types";
-import { Button, Checkbox, Box, Grid, TextField, Fab } from "@material-ui/core";
-import { Radio, RadioGroup, FormControlLabel, FormControl, FormLabel } from "@material-ui/core";
-import { Card, CardHeader, CardContent, Typography } from "@material-ui/core";
-import AddIcon from '@material-ui/icons/Add';
+import { Button, Checkbox, Grid, TextField, Fab, withStyles, FormControlLabel } from "@material-ui/core";
+import { Dialog, Card, CardHeader, CardContent, CardActions, Typography } from "@material-ui/core";
 import DeleteIcon from '@material-ui/icons/Delete';
 import DateTimePicker from "../shared/DateTimePicker"
-import ActionPaper from "../shared/ActionPaper";
 import { formatDate } from "../shared/functions/formatDate"
 import ButtonCircularProgress from "../shared/ButtonCircularProgress";
-import { EmptyCliente } from '../models/Client'
-import { EmptyOrder } from '../models/Order'
-import { PostNewOrder } from '../api/Order'
-import ClientSearchSelect from './ClientSearchSelect'
+import { Note, Client } from '../models/Models'
+import { PostNewNote } from '../api/Notes'
+import ClientSearchSelect from '../shared/ClientSearchSelect'
+import AddClient from '../clients/AddClient'
+
+const styles = ({
+  mainCard: {    
+    border: "none",  
+    boxShadow: "none",
+    padding: '10px'
+  },
+});
+
+function AddClientDialog(props) {
+  const { mainSnackBar, onClose, selectedValue, open } = props;
+
+  const handleClose = () => {
+    onClose(selectedValue);
+  };
+
+  return (
+    <Dialog open={open} onClose={handleClose} >
+      <AddClient/>
+    </Dialog>
+  );
+}
 
 function AddNote(props) {
-  const { pushMessageToSnackbar, onClose } = props;
-  const order = EmptyOrder;
-  const client = EmptyCliente;
-  const [description, setDescription] = useState(order.description);
-  const [priority, setPriority] = useState(order.priority.toString());
+  const { classes, editNote, mainSnackBar, onClose } = props;
+  const [note, setNote] = useState(Note);
+  const [client, setClient] = useState(Client);
+  const [openClientDialog, setOpenClientDialog] = useState(false);
+  const [description, setDescription] = useState('');
+  const [priority, setPriority] = useState(false);
   const [showClientInfo, setShowClientInfo] = useState(false);  
 
+  // If it's an edit, load the Note values
+  /*if (editNote) {
+    setNote(editNote);
+    setClient(editNote.client);
+  }*/
+
   const handlePost = useCallback((response) => {
-    console.log(response.json());
-    onClose();
+    if (response.status === 200) {
+      mainSnackBar({ text: "Nota guardada correctamente.", isErrorMessage: false });
+      onClose();
+    }
+    else {
+      mainSnackBar({ text: "Error al guardar la nota!", isErrorMessage: false });
+    }
   }, [onClose]);
 
-  const onPriorityChange = (event) => {    
-    setPriority(event.target.value);
-    order.priority = event.target.value;
-  }
-
-  const onAssignedDate = (date) => {
-    order.orderDate = date;
-  }
-
   const onClearClient = () => {
-    client.fillClientInfoFromDb(EmptyCliente);
-    order.clientId = client.id;
+    setClient(Client);
+    note.clientId = '';
     setShowClientInfo(false);
   }
 
-  const onClientSelected = useCallback((newClient) => {    
-    client.fillClientInfoFromDb(newClient);
-    order.clientId = client.id;
+  const onClientSelected = useCallback((newClient) => {
+    setClient(newClient);
+    note.clientId = newClient._id;
     setShowClientInfo(true);    
-  }, [client, setShowClientInfo]);
-
-  const onDescriptionChanged = (event) => {
-    setDescription(event.target.value);
-    order.description = event.target.value;
-  }
+  }, [setClient, setShowClientInfo]);
 
   const clientInfo = (
-    <Grid container spacing={2}>
-      <Grid item xs={10}>
-        <Typography variant="h5" component="h2">
-          {client.name} {client.surname} {client.second_surname}          
-        </Typography>
-        <Typography variant="body2" component="p">
-          {client.phone} - {client.email} <br/>
-          {client.address}, {client.cp}, {client.city}
-        </Typography>
-      </Grid>
-      <Grid item>
-        <Fab size="small" color="primary" aria-label="delete" onClick={ () => { onClearClient() } }>
-          <DeleteIcon />
-        </Fab>
-      </Grid>
-    </Grid>
+    <Card variant="outlined">
+      <CardContent>
+        <Grid container spacing={2}>
+          <Grid item xs={10}>
+            <Typography variant="h5" component="h2">
+              {client.name} {client.surname} {client.second_surname}          
+            </Typography>
+            <Typography variant="body2" component="p">
+              {client.phone} - {client.email} <br/>
+              {client.address}, {client.cp}, {client.city}
+            </Typography>
+          </Grid>
+          <Grid item>
+            <Fab size="small" color="primary" aria-label="delete" onClick={ () => { onClearClient() } }>
+              <DeleteIcon />
+            </Fab>
+          </Grid>
+        </Grid>
+      </CardContent>    
+    </Card>
   );
 
   const clientSelection = (                   
-    <Grid container spacing={2}>
+    <Grid container alignItems="center" spacing={2}>
       <Grid item>
         <ClientSearchSelect onClientSelected={onClientSelected} />
       </Grid>
       <Grid item>
-        <Fab color="primary" size="medium" aria-label="add">
-          <AddIcon />
-        </Fab>  
+        <Typography>o bien</Typography>
+      </Grid>
+      <Grid item>
+        <Button color="primary" variant="contained" size="large" onClick={()=>{setOpenClientDialog(true)}}>
+          Alta cliente
+        </Button>
       </Grid>
     </Grid>
   );   
 
   return (
     <Fragment>
-      <ActionPaper
-        helpPadding
-        content={          
-          <Fragment>
-            <Grid container spacing={2} justify="flex-start" >
-              <Grid item xs={10}>
-                <Typography variant="h6" gutterBottom>
-                  Crear nuevo nota
-                </Typography>
-              </Grid>
-              <Grid item xs={3}>
-                <TextField label="Fecha creación" value={formatDate(order.creationDate, true)} InputProps={{ readOnly: true, }} variant="outlined" />
-              </Grid>
-              <Grid item xs={6}>
-                <FormControlLabel
-                  control={ <Checkbox
-                    checked={order.priority}
-                    onChange={onPriorityChange}
+      <Card className={classes.mainCard}>
+        <CardHeader title="Crear nueva nota" titleTypographyProps={{variant:'h6'}} />
+        <CardContent>
+          <AddClientDialog open={openClientDialog}/>
+          <Grid container spacing={2} justify="flex-start" alignItems="center">
+            <Grid item xs={8}>
+              <TextField label="Descripción" fullWidth={true} variant="outlined" />
+            </Grid>
+            <Grid item xs={4}/>
+            <Grid item xs={3}>
+              <TextField label="Fecha creación" value={formatDate(note.creationDate, true)} InputProps={{ readOnly: true, }} variant="outlined" />
+            </Grid>
+            <Grid item xs={6}>
+              <FormControlLabel
+                control={ 
+                  <Checkbox
+                    checked={priority}
+                    onChange={(ev) => {
+                      setPriority(ev.target.checked);
+                      note.priority = ev.target.checked;
+                    }}
                     color="primary"
-                  /> }
-                  label="Prioritario"
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <Card variant="outlined">
-                  <CardHeader subheader= "Cliente"/>
-                  <CardContent>                    
-                    {showClientInfo ? clientInfo : clientSelection }
-                  </CardContent>
-                </Card>                
-              </Grid>                
-              <Grid item xs={8}>
-                <TextField label="Descripcion del parte" variant="outlined" value={description} onChange={onDescriptionChanged} 
-                  multiline fullWidth={true}  rows={4} rowsMax={4} 
-                />    
-              </Grid>                       
-              <Grid item xs={8}>
-                <Card variant="outlined">
-                  <CardHeader subheader= "Programación"/>
-                  <CardContent>                   
-                    <Grid container spacing={2}>
-                      <Grid item xs={4}>                        
-                        <TextField label="Operario asignado" defaultValue="" InputProps={{ readOnly: true, }} variant="outlined" />                       
-                      </Grid> 
-                      <Grid item xs={4}> 
-                        <DateTimePicker label="Fecha programada" value={order.orderDate} onChange={onAssignedDate}/>
-                      </Grid>                                              
-                    </Grid>                    
-                  </CardContent>                  
-                </Card>                
-              </Grid>                                                           
-            </Grid>                      
-          </Fragment> 
-        }
-        actions={
-          <Fragment>
-            <Box mr={1}>
+                  />
+                }
+                label="Prioritario"
+              />
+            </Grid>
+            <Grid item xs={6}>
+              {showClientInfo ? clientInfo : clientSelection }
+            </Grid>                
+            <Grid item xs={8}>
+              <TextField label="Comentarios" variant="outlined" value={description} multiline fullWidth={true}  rows={4} rowsMax={4}
+                  onChange={(event)=>{
+                    setDescription(event.target.value);
+                    note.description = event.target.value;
+                }}
+              />    
+            </Grid>                       
+            <Grid item xs={8}>
+              <Card variant="outlined">
+                <CardHeader subheader= "Programación"/>
+                <CardContent>                   
+                  <Grid container spacing={2}>
+                    <Grid item xs={4}>                        
+                      <TextField label="Operario asignado" defaultValue="" InputProps={{ readOnly: true, }} variant="outlined" />                       
+                    </Grid> 
+                    <Grid item xs={4}> 
+                      <DateTimePicker label="Fecha programada" value={note.orderDate} 
+                        onChange={date => note.orderDate = date}
+                      />
+                    </Grid>                                              
+                  </Grid>                    
+                </CardContent>                  
+              </Card>                
+            </Grid>
+          </Grid>
+        </CardContent>
+        <CardActions>
+          <Grid container spacing={2} justify="flex-end">
+            <Grid item>
               <Button onClick={onClose}>
                 Cancelar
-              </Button>
-            </Box>
-            <Button
-              onClick={ () => { PostNewOrder(order, handlePost) } }
-              variant="contained"
-              color="secondary">
-              Guardar {<ButtonCircularProgress />}
-            </Button>
-          </Fragment>
-        }
-      />
+              </Button>             
+            </Grid>
+            <Grid item>
+              <Button
+                onClick={ () => { PostNewNote(note, handlePost)}}
+                variant="contained"
+                color="secondary">
+                Guardar {<ButtonCircularProgress />}
+              </Button>            
+            </Grid>          
+          </Grid>
+        </CardActions>
+      </Card>      
     </Fragment>
   );
 }
@@ -166,4 +195,4 @@ AddNote.propTypes = {
   pushMessageToSnackbar: PropTypes.func,
 };
 
-export default AddNote;
+export default withStyles(styles)(AddNote);

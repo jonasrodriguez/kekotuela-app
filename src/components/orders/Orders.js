@@ -1,27 +1,28 @@
 import React, { useState, useEffect } from "react";
 import { Paper } from "@material-ui/core";
-import { FetchNoteList } from "../api/Notes"
+import { FetchOrderList } from "../api/Order"
 import AddOrder from "./AddOrder"
 import OrderTable from "./OrderTable";
 
-function Orders() {
-  const [notes, setNotes] = useState([]);  
+function Orders(props) {
+  const { mainSnackBar } = props;
+  const [orders, setOrders] = useState([]);  
   const [isNewDiagOpen, setIsNewDiagOpen] = useState(false);
 
-  useEffect(() => {FetchNoteList(setNotes);}, [setNotes]);
+  useEffect(() => {FetchOrderList(setOrders);}, [setOrders]);
 
   if (isNewDiagOpen) {
     return (
       <Paper>
-        <AddOrder onClose={()=>{setIsNewDiagOpen(false)}} />
+        <AddOrder mainSnackBar={mainSnackBar} onClose={()=>{setIsNewDiagOpen(false)}} />
       </Paper>
     );
   }
   return (
     <Paper>
-      <OrderTable notes={notes} onNewButtonClick={()=>{setIsNewDiagOpen(true)}} />
+      <OrderTable orders={orders} onNewButtonClick={()=>{setIsNewDiagOpen(true)}} />
     </Paper>    
   );
 }
 
-export default Notes;
+export default Orders;

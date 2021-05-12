@@ -11,7 +11,7 @@ const styles = (theme) => ({
 });
 
 function ConsecutiveSnackbars(props) {
-  const { classes, getPushMessageFromChild } = props;
+  const { classes, getMessageToSnackBar } = props;
   const [isOpen, setIsOpen] = useState(false);
   const [messageInfo, setMessageInfo] = useState({});
   const queue = useRef([]);
@@ -45,8 +45,8 @@ function ConsecutiveSnackbars(props) {
   }, [queue, isOpen, setIsOpen, processQueue]);
 
   useEffect(() => {
-    getPushMessageFromChild(pushMessage);
-  }, [getPushMessageFromChild, pushMessage]);
+    getMessageToSnackBar(pushMessage);
+  }, [getMessageToSnackBar, pushMessage]);
 
   return (
     <Snackbar
@@ -70,11 +70,10 @@ function ConsecutiveSnackbars(props) {
       }
     />
   );
-
 }
 
 ConsecutiveSnackbars.propTypes = {
-  getPushMessageFromChild: PropTypes.func.isRequired,
+  getPushMessageFromChild: PropTypes.func,
   classes: PropTypes.object.isRequired,
 };
 

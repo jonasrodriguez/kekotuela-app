@@ -1,7 +1,10 @@
-import React, { memo, useCallback, useState, useEffect, Fragment } from "react";
+import React, { memo, useState, Fragment, useCallback } from "react";
 import PropTypes from "prop-types";
 import classNames from "classnames";
 import { withStyles } from "@material-ui/core";
+import ConsecutiveSnackbarMessages from "./shared/ConsecutiveSnackbarMessages"
+import LoginDialog from "./navigation/LoginDialog"
+import TopBar from "./navigation/TopBar"
 import NavBar from "./navigation/NavBar";
 import Routing from "./Routing";
 
@@ -20,52 +23,24 @@ const styles = (theme) => ({
 
 function Main(props) {
   const { classes } = props;
-  const [selectedTab, setSelectedTab] = useState(null);
-  const [CardChart, setCardChart] = useState(null);
-  const [hasFetchedCardChart, setHasFetchedCardChart] = useState(false);
-  const [EmojiTextArea, setEmojiTextArea] = useState(null);
-  const [hasFetchedEmojiTextArea, setHasFetchedEmojiTextArea] = useState(false);
-  const [ImageCropper, setImageCropper] = useState(null);
-  const [hasFetchedImageCropper, setHasFetchedImageCropper] = useState(false);
-  const [Dropzone, setDropzone] = useState(null);
-  const [hasFetchedDropzone, setHasFetchedDropzone] = useState(false);
-  const [DateTimePicker, setDateTimePicker] = useState(null);
-  const [hasFetchedDateTimePicker, setHasFetchedDateTimePicker] = useState(
-    false
+  const [openLoginDialog, setOpenLoginDialog] = useState(true);
+  const [mainSnackBar, setMainSnackBar] = useState(null);
+
+  const getMessageToSnackBar = useCallback(
+    (pushMessage) => {
+      setMainSnackBar(() => pushMessage);
+    },
+    [setMainSnackBar]
   );
-  const [transactions, setTransactions] = useState([]);
-  const [statistics, setStatistics] = useState({ views: [], profit: [] });
-  const [posts, setPosts] = useState([]);
-  const [targets, setTargets] = useState([]);
-  const [messages, setMessages] = useState([]);
-  const [isAccountActivated, setIsAccountActivated] = useState(false);
-  const [isAddBalanceDialogOpen, setIsAddBalanceDialogOpen] = useState(false);
-  const [pushMessageToSnackbar, setPushMessageToSnackbar] = useState(null);
-
-  const openAddBalanceDialog = useCallback(() => {
-    setIsAddBalanceDialogOpen(true);
-  }, [setIsAddBalanceDialogOpen]);
-
-  const closeAddBalanceDialog = useCallback(() => {
-    setIsAddBalanceDialogOpen(false);
-  }, [setIsAddBalanceDialogOpen]);
-
-  const onPaymentSuccess = useCallback(() => {
-    pushMessageToSnackbar({
-      text: "Your balance has been updated.",
-    });
-    setIsAddBalanceDialogOpen(false);
-  }, [pushMessageToSnackbar, setIsAddBalanceDialogOpen]);
 
   return (
     <Fragment>
-      <NavBar
-        selectedTab={selectedTab}
-        messages={messages}
-        openAddBalanceDialog={openAddBalanceDialog}
-      />
+      <LoginDialog open={openLoginDialog} onClose={() => setOpenLoginDialog(false)} />
+      <TopBar messages={[]} />
+      <NavBar selectedTab={null} />
+      <ConsecutiveSnackbarMessages getMessageToSnackBar={getMessageToSnackBar} />
       <main className={classNames(classes.main)}>
-        <Routing />
+        <Routing mainSnackBar={mainSnackBar}/>
       </main>
     </Fragment>
   );

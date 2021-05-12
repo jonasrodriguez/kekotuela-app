@@ -3,10 +3,12 @@ import PropTypes from "prop-types";
 import { Switch } from "react-router-dom";
 import { withStyles } from "@material-ui/core";
 import PropsRoute from "./shared/PropsRoute";
+
 import Clients from "./clients/Clients";
 import Users from "./users/Users";
 import Materials from "./materials/Materials";
 import Notes from "./notes/Notes";
+import Orders from "./orders/Orders";
 
 const styles = (theme) => ({
   wrapper: {
@@ -44,25 +46,34 @@ const styles = (theme) => ({
 });
 
 function Routing(props) {
-  const {classes} = props;
+  const {classes, mainSnackBar} = props;
   return (
     <div className={classes.wrapper}>
       <Switch>        
         <PropsRoute
           path="/c/notes"
           component={Notes}
+          mainSnackBar={mainSnackBar}
+        />
+        <PropsRoute
+          path="/c/orders"
+          component={Orders}
+          mainSnackBar={mainSnackBar}
         />
         <PropsRoute
           path="/c/materials"
           component={Materials}
+          mainSnackBar={mainSnackBar}
         />        
         <PropsRoute
           path="/c/clients"
           component={Clients}
+          mainSnackBar={mainSnackBar}
         />
         <PropsRoute
           path="/c/users"
           component={Users}
+          mainSnackBar={mainSnackBar}
         />
       </Switch>
     </div>
