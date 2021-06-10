@@ -1,10 +1,11 @@
 import React, { useState, useCallback } from "react";
 import PropTypes from "prop-types";
-import { Box, Button, Divider, List, ListItemText, Toolbar, Paper, withStyles } from "@material-ui/core";
-import { Table, TableRow, TableBody, TableCell } from "@material-ui/core";
+import { Box, Table, TableRow, TableBody, TableCell } from "@material-ui/core";
+import { withStyles } from "@material-ui/styles";
 import HighlightedInformation from "../shared/HighlightedInformation"
 import EnhancedTableHead from "../shared/EnhancedTableHead";
 import Pagination from "../shared/Pagination"
+import RowControls from "../shared/RowControls"
 
 const styles = theme => ({
     tableWrapper: {
@@ -44,71 +45,67 @@ const rows = [
     {
       id: "city",
       label: "Referencia"
-    }
+    },
+    {
+      id: "actions",
+    },
 ];
 
 const rowsPerPage = 25;
 
 function MaterialsTable(props) {
-    const { classes, materials, onNewButtonClick } = props;
+    const { classes, materials, filter, updateItem, deleteItem } = props;
     const [page, setPage] = useState(0);
 
     const handleChangePage = useCallback((_, page) => { 
         setPage(page); 
-    }, [setPage]);
+    }, [setPage]);    
 
-    const emptyTable = (
+    if (!materials.length) {
+      return (
         <Box className={classes.contentWrapper}>
-            <HighlightedInformation>
-                No hay materiales en el sistema.
-            </HighlightedInformation>
+          <HighlightedInformation>
+            No hay materiales en el sistema.
+          </HighlightedInformation>
         </Box> 
-    );
-
-    const contentTable = (
-        <TableBody>
-        {materials
-            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            .map((material, index) => (
-            <TableRow hover tabIndex={-1} key={index}>
-                <TableCell component="th" scope="row" className={classes.firstData}>
-                {material.name}
-                </TableCell>
-                <TableCell component="th" scope="row">
-                {material.price}
-                </TableCell>
-                <TableCell component="th" scope="row">
-                {material.reference}
-                </TableCell>                                
-            </TableRow>
-            ))}
-        </TableBody> 
-    );
+      );
+    }
 
     return (
-        <Paper>
-            <List disablePadding>
-                <Toolbar className={classes.toolbar}>
-                    <ListItemText primary="Lista de materiales" />
-                    <Button variant="contained" color="secondary" disableElevation onClick={onNewButtonClick}>
-                        Añadir material
-                    </Button>
-                </Toolbar>
-                <Divider className={classes.divider} />
-                <Box className={classes.tableWrapper}>
-                    <Table aria-labelledby="tableTitle">
-                        <EnhancedTableHead rowCount={materials.length} rows={rows} />
-                        {materials.length ? contentTable : emptyTable }
-                    </Table>
-                    <Pagination items={materials} rowsPerPage={rowsPerPage} page={page} handleChangePage={handleChangePage} />
-                </Box>                
-            </List>
-        </Paper>    
+      <Box className={classes.tableWrapper}>
+        <Table aria-labelledby="tableTitle">
+          <EnhancedTableHead rowCount={materials.length} rows={rows} />
+          <TableBody>
+            {materials
+              .filter(mat => { return mat.name.toLowerCase().startsWith(filter) || mat.reference.toLowerCase().startsWith(filter) })
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((material, index) => (
+              <TableRow hover tabIndex={-1} key={index}>
+                <TableCell component="th" scope="row" className={classes.firstData}>
+                  {material.name}
+                </TableCell>
+                <TableCell component="th" scope="row">
+                  {material.price}
+                </TableCell>
+                <TableCell component="th" scope="row">
+                  {material.reference}
+                </TableCell>
+                <TableCell component="th" scope="row">
+                  <RowControls updateItem={() => updateItem(index)} deleteItem={() => deleteItem(index)}/>
+                </TableCell>                               
+              </TableRow>
+            ))}
+            </TableBody>
+          </Table>
+        <Pagination items={materials} rowsPerPage={rowsPerPage} page={page} handleChangePage={handleChangePage} />
+      </Box>    
     );
 }
 
 MaterialsTable.propTypes = {
-    classes: PropTypes.object.isRequired
+    classes: PropTypes.object.isRequired,
+    updateItem: PropTypes.func.isRequired,
+    deleteItem: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles)(MaterialsTable);

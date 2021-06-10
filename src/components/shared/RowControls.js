@@ -1,6 +1,6 @@
-import React from "react";
+import React, { Fragment } from "react";
 import PropTypes from "prop-types";
-import { IconButton, Box, Divider } from "@material-ui/core";
+import { ButtonGroup, IconButton } from "@material-ui/core";
 import CreateIcon from '@material-ui/icons/Create';
 import DeleteIcon from '@material-ui/icons/Delete';
 
@@ -8,15 +8,16 @@ function RowControls(props) {
   const { updateItem, deleteItem } = props;
 
   return (
-    <Box>
-      <IconButton aria-label="Update Item" onClick={updateItem}>
-        <CreateIcon />
-      </IconButton>
-      <Divider />      
-      <IconButton color="primary" aria-label="Delete Item" onClick={deleteItem}>
-        <DeleteIcon />
-      </IconButton>
-    </Box>
+    <Fragment>
+      <ButtonGroup variant="contained" size="small">
+        <IconButton onClick={updateItem}>
+          <CreateIcon fontSize="small" />
+        </IconButton>
+        <IconButton onClick={deleteItem}>
+          <DeleteIcon color="secondary" fontSize="small" />
+        </IconButton>
+      </ButtonGroup>
+    </Fragment>
   );
 }
 

@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React from "react";
 import { Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Slide } from "@material-ui/core";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -8,19 +8,19 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 export default function DeleteDialog(props) {
   const { mainSnackBar, onClose, deleteItem, apiCall } = props;  
 
-  const onDelete = useCallback(() => {
+  const onDelete = () => {
     apiCall(deleteItem.id, deleteHandle);
-  }, [deleteItem])
+  }
 
-  const deleteHandle = useCallback((response) => {
-    if (response.status === 200) {
-      mainSnackBar({ text: "Nota eliminada correctamente.", isError: false, });
+  const deleteHandle = (response) => {
+    if (response.status >= 200 && response.status < 300) {
+      mainSnackBar({ text: "Eliminado correctamente.", isError: false, });
       onClose();
     }
     else {
-      mainSnackBar({ text: "Error al eliminar la nota.", isError: true, });
+      mainSnackBar({ text: "Error al eliminar.", isError: true, });
     }
-  }, [onClose])
+  }
 
   return (
     <Dialog open={deleteItem.open} TransitionComponent={Transition} keepMounted onClose={onClose}

@@ -1,6 +1,6 @@
 import React, { memo } from "react";
 import PropTypes from "prop-types";
-import { Button, createMuiTheme, MuiThemeProvider } from "@material-ui/core";
+import { Button, createMuiTheme, ThemeProvider } from "@material-ui/core";
 
 function ColoredButton(props) {
   const { color, children, theme } = props;
@@ -14,11 +14,11 @@ function ColoredButton(props) {
   });
   const buttonProps = (({ color, theme, children, ...o }) => o)(props);
   return (
-    <MuiThemeProvider theme={buttonTheme}>
+    <ThemeProvider theme={buttonTheme}>
       <Button {...buttonProps} color="primary">
         {children}
       </Button>
-    </MuiThemeProvider>
+    </ThemeProvider>
   );
 }
 

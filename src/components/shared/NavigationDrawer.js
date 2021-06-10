@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import { List, ListItem, ListItemIcon, ListItemText, Drawer, withStyles, IconButton, Typography, withWidth, isWidthUp, Toolbar } from "@material-ui/core";
+import { List, ListItem, ListItemIcon, ListItemText, Drawer, IconButton, Typography, Toolbar } from "@material-ui/core";
+import { withStyles } from "@material-ui/styles";
 import CloseIcon from "@material-ui/icons/Close";
 
 const styles = theme => ({
@@ -25,7 +26,7 @@ function NavigationDrawer(props) {
 
   useEffect(() => {
     window.onresize = () => {
-      if (isWidthUp("sm", width) && open) {
+      if (open) {
         onClose();
       }
     };
@@ -111,6 +112,4 @@ NavigationDrawer.propTypes = {
   selectedItem: PropTypes.string
 };
 
-export default withWidth()(
-  withStyles(styles, { withTheme: true })(NavigationDrawer)
-);
+export default  withStyles(styles, { withTheme: true })(NavigationDrawer)

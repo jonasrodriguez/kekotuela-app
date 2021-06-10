@@ -1,13 +1,14 @@
 import React, { useState, useCallback, useRef } from "react";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
-import { TextField, Button, Checkbox, Typography, FormControlLabel, withStyles } from "@material-ui/core";
+import { withStyles } from "@material-ui/styles";
+import { TextField, Button, Checkbox, Typography, FormControlLabel } from "@material-ui/core";
 import { Dialog, DialogTitle, DialogContent, DialogActions } from "@material-ui/core";
 import ButtonCircularProgress from "../shared/ButtonCircularProgress";
 import VisibilityPasswordTextField from "../shared/VisibilityPasswordTextField";
 import Auth from "../shared/Auth"
 import { isAlphaNumeric } from "../shared/functions/isAlphaNumeric"
-import { Login } from "../api/User"
+import { Login } from "../shared/api/Users";
 
 const styles = (theme) => ({
   forgotPassword: {
@@ -33,13 +34,10 @@ const styles = (theme) => ({
     flexDirection: "column",
     alignItems: "center",
     paddingBottom: theme.spacing(3),
-    maxWidth: 420
+    maxWidth: 300
   },
   actions: {
     marginTop: theme.spacing(2)
-  },
-  dialogPaperScrollPaper: {
-    maxHeight: "none"
   },
   dialogContent: {
     paddingTop: 0,
@@ -53,7 +51,7 @@ function LoginDialog(props) {
   const [isLoading, setIsLoading] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const loginEmail = useRef();
-  const loginPassword = useRef();
+  const loginPassword = useRef(); 
 
   const login = useCallback(() => {
     Auth.loginStatus = true;
@@ -90,9 +88,7 @@ function LoginDialog(props) {
   }, [setIsLoading]);
 
   return (
-    <Dialog  open={open} onClose={onClose} disableBackdropClick disableEscapeKeyDown
-      classes={{ paper: classes.dialogPaper, paperScrollPaper: classes.dialogPaperScrollPaper }}
-    >
+    <Dialog  open={open} onClose={onClose} classes={{ paper: classes.dialogPaper }} >
       <DialogTitle disableTypography>
         <Typography variant="h5">Login</Typography>
       </DialogTitle>
@@ -132,12 +128,12 @@ function LoginDialog(props) {
         />
         <FormControlLabel
           className={classes.formControlLabel}
-          control={<Checkbox color="primary" />}
+          control={<Checkbox />}
           label={<Typography variant="body1">Recordarme</Typography>}
         />          
       </DialogContent>
       <DialogActions>
-        <Button type="submit" fullWidth variant="contained" color="secondary" disabled={isLoading} size="large" onClick={login} >
+        <Button type="submit" variant="contained" disabled={isLoading} size="large" onClick={login} >
           Login {isLoading && <ButtonCircularProgress />}
         </Button>            
       </DialogActions>

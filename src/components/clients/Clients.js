@@ -1,10 +1,12 @@
 import React, { useCallback, useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { List, Divider, Paper, withStyles } from "@material-ui/core";
+import { List, Divider, Paper } from "@material-ui/core";
+import { withStyles } from "@material-ui/styles";
 import ClientTable from "./ClientTable";
-import ClientInfo from "./ClientInfo";
 import AddClient from "./AddClient";
-import { FetchClientList } from '../api/Client';
+import DeleteDialog from "../shared/DeleteDialog";
+import SectionHeader from "../shared/SectionHeader";
+import { FetchClients, DeleteClient } from '../shared/api/Clients'
 
 const styles = {
   divider: {
@@ -12,35 +14,55 @@ const styles = {
   }
 };
 
+const emptyUpdate = {update:false, client:''}
+const emptyDelete = {open: false, name:'', id: '', message:''}
+
 function Clients(props) {
-  const classes = props;
+  const { classes, mainSnackBar } = props;
   const [clients, setClients] = useState([]);  
-  const [isAddClientOpen, setIsAddClientOpen] = useState(false);
+  const [filter, setFilter] = useState('');
+  const [isNewDiagOpen, setIsNewDiagOpen] = useState(false);
+  const [deleteInfo, setDeleteInfo] = useState(emptyDelete);
+  const [updateInfo, setUpdateInfo] = useState(emptyUpdate);
 
-  const openAddClientModal = useCallback(() => {
-    setIsAddClientOpen(true);
-  }, [setIsAddClientOpen]);
+  useEffect(() => {FetchClients(setClients);}, [setClients]);  
 
-  const closeAddClientModal = useCallback(() => {
-    FetchClientList(setClients);
-    setIsAddClientOpen(false);
-  }, [setClients, setIsAddClientOpen]);
+  const onDiagClose = () => {   
+    setIsNewDiagOpen(false);
+    setUpdateInfo(emptyUpdate);
+    FetchClients(setClients);
+  } 
 
-  useEffect(() => {FetchClientList(setClients);}, [setClients]);  
+  const updateItem = useCallback((index) => { 
+    setUpdateInfo({update:true, client:clients[index]})
+    setIsNewDiagOpen(true);
+  }, [clients]);
 
-  if (isAddClientOpen) {
+  const deleteItem = useCallback((index) => { 
+    const client = clients[index];
+    setDeleteInfo({open: true, name: "Cliente", id: client._id, 
+      message: "cliente " + client.name + " " + client.surname});
+  }, [clients]);
+
+  const onCloseDelete = () => {
+    setDeleteInfo(emptyDelete);
+    FetchClients(setClients);
+  }
+
+  if (isNewDiagOpen) {
     return (
       <Paper>
-        <AddClient onClose={closeAddClientModal} /> 
+        <AddClient mainSnackBar={mainSnackBar} onClose={onDiagClose} updateInfo={updateInfo} /> 
       </Paper>
     );
   }
   return (
     <Paper>
       <List disablePadding>
-        <ClientInfo openAddClientModal={openAddClientModal} />
+        <SectionHeader title="Lista clientes" searchFunc={value => {setFilter(value.toLowerCase())}} buttonText="Añadir Cliente" buttonFunc={() => {setIsNewDiagOpen(true)}} />
         <Divider className={classes.divider} />
-        <ClientTable clients={clients} />
+        <ClientTable clients={clients} filter={filter} updateItem={updateItem} deleteItem={deleteItem} />
+        <DeleteDialog deleteItem={deleteInfo} onClose={onCloseDelete}  apiCall={DeleteClient} mainSnackBar={mainSnackBar} />
       </List>  
     </Paper>    
   );

@@ -1,6 +1,7 @@
 import React, { Fragment, useState, useRef, useCallback } from "react";
 import PropTypes from "prop-types";
-import { Popover, IconButton, AppBar, List, Divider, ListItem, ListItemText, Typography, Box, withStyles } from "@material-ui/core";
+import { Popover, IconButton, AppBar, List, Divider, ListItem, ListItemText, Typography, Box } from "@material-ui/core";
+import { withStyles } from "@material-ui/styles";
 import MessageIcon from "@material-ui/icons/Message";
 import MessageListItem from "./MessageListItem";
 

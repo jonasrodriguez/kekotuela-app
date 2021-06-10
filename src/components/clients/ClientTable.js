@@ -1,6 +1,8 @@
 import React, { useCallback, useState } from "react";
 import PropTypes from "prop-types";
-import { Box, Table, TableBody, TableCell, TablePagination, TableRow, withStyles } from "@material-ui/core";
+import { Box, Table, TableBody, TableCell, TablePagination, TableRow } from "@material-ui/core";
+import { withStyles } from "@material-ui/styles";
+import RowControls from "../shared/RowControls"
 import EnhancedTableHead from "../shared/EnhancedTableHead";
 import HighlightedInformation from "../shared/HighlightedInformation";
 
@@ -46,21 +48,21 @@ const rows = [
   {
     id: "city",
     label: "Ciudad"
+  },
+  {
+    id: "actions",
   }
 ];
 
 const rowsPerPage = 25;
 
 function ClientTable(props) {
-  const { clients, classes } = props;
+  const { classes, clients, filter, updateItem, deleteItem } = props;
   const [page, setPage] = useState(0);
 
-  const handleChangePage = useCallback(
-    (_, page) => {
-      setPage(page);
-    },
-    [setPage]
-  );
+  const handleChangePage = useCallback((_, page) => { 
+    setPage(page); 
+  }, [setPage]);  
 
   if (!clients.length) {
     return (
@@ -77,6 +79,8 @@ function ClientTable(props) {
         <EnhancedTableHead rowCount={clients.length} rows={rows} />
         <TableBody>
           {clients
+            .filter(user => { return user.name.toLowerCase().startsWith(filter) || user.surname.toLowerCase().startsWith(filter)
+              || user.dni.toLowerCase().startsWith(filter) || user.phone.startsWith(filter) })
             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             .map((client, index) => (
               <TableRow hover tabIndex={-1} key={index}>
@@ -91,6 +95,9 @@ function ClientTable(props) {
                 </TableCell>
                 <TableCell component="th" scope="row">
                   {client.city}
+                </TableCell>
+                <TableCell component="th" scope="row">
+                  <RowControls updateItem={() => updateItem(index)} deleteItem={() => deleteItem(index)} />
                 </TableCell>
               </TableRow>
             ))}

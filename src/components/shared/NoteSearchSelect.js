@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { TextField } from "@material-ui/core";
-import { FetchNoteList } from "../api/Notes"
+import { FetchNotes } from "../shared/api/Notes";
 
 export default function NoteSearchSelect(props) {
     const { onNoteSelected } = props;
     const [open, setOpen] = useState(false);
     const [options, setOptions] = useState([]);
 
-    useEffect(() => { FetchNoteList(setOptions); }, [setOptions]); 
+    useEffect(() => { FetchNotes(setOptions); }, [setOptions]); 
 
     return (
         <Autocomplete 

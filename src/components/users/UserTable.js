@@ -1,29 +1,21 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Box, Table, TableBody, TableCell, TableRow, withStyles } from "@material-ui/core";
+import { withStyles } from "@material-ui/styles";
+import { Box, Table, TableBody, TableCell, TableRow } from "@material-ui/core";
 import EnhancedTableHead from "../shared/EnhancedTableHead";
 import HighlightedInformation from "../shared/HighlightedInformation";
+import RowControls from "../shared/RowControls"
+import CheckIcon from '@material-ui/icons/Check';
+import CloseIcon from '@material-ui/icons/Close';
 
 const styles = theme => ({
   tableWrapper: {
     overflowX: "auto",
     width: "100%"
   },
-  blackBackground: {
-    backgroundColor: theme.palette.primary.main
-  },
   contentWrapper: {
     padding: theme.spacing(3),
-    [theme.breakpoints.down("xs")]: {
-      padding: theme.spacing(2)
-    },
     width: "100%"
-  },
-  dBlock: {
-    display: "block !important"
-  },
-  dNone: {
-    display: "none !important"
   },
   firstData: {
     paddingLeft: theme.spacing(3)
@@ -50,11 +42,14 @@ const rows = [
   {
     id: "admin",
     label: "Administrador"
+  },
+  {
+    id: "actions"
   }
 ];
 
 function UserTable(props) {
-  const { users, classes } = props;
+  const { classes, users, filterUsers, updateItem, deleteItem } = props;
 
   if (!users.length) {
     return (
@@ -71,6 +66,8 @@ function UserTable(props) {
         <EnhancedTableHead rowCount={users.length} rows={rows} />
         <TableBody>
           {users
+            .filter(user => { return user.userName.startsWith(filterUsers) || user.name.startsWith(filterUsers) || user.surname.startsWith(filterUsers)
+              || user.email.startsWith(filterUsers) || user.phone.startsWith(filterUsers) })
             .map((user, index) => (
               <TableRow hover tabIndex={-1} key={index}>
                 <TableCell component="th" scope="row" className={classes.firstData}>
@@ -85,9 +82,12 @@ function UserTable(props) {
                 <TableCell component="th" scope="row">
                   {user.email}
                 </TableCell>
+                <TableCell component="th" scope="row" style={{ verticalAlign: 'bottom' }}>
+                  {(user.permissionLevel === 1) ? <CheckIcon fontSize="small" /> : <CloseIcon fontSize="small" /> }
+                </TableCell>
                 <TableCell component="th" scope="row">
-                  {user.permissionLevel}
-                </TableCell>                
+                  <RowControls updateItem={() => updateItem(index)} deleteItem={() => deleteItem(index)} />
+                </TableCell>                 
               </TableRow>
             ))}
         </TableBody>
@@ -99,7 +99,9 @@ function UserTable(props) {
 UserTable.propTypes = {
   theme: PropTypes.object.isRequired,
   classes: PropTypes.object.isRequired,
-  clients: PropTypes.arrayOf(PropTypes.object).isRequired
+  users: PropTypes.arrayOf(PropTypes.object).isRequired,
+  updateUser: PropTypes.func.isRequired,
+  deleteUser: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles, { withTheme: true })(UserTable);

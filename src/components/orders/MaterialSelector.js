@@ -10,11 +10,6 @@ function MaterialSelector(props) {
   const [materials, setMaterials] = useState([]);
   const [grandTotal, setGrandTotal] = useState(0);
 
-  // Load parent materialList
-  /*if (materialList) {
-    setMaterialList(materialList);
-  }*/
-
   const onMaterialSelected = useCallback((selectedMat) => {
     if (selectedMat) {
       selectedMat.quantity = 0;

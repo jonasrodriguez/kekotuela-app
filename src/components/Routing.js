@@ -1,12 +1,13 @@
 import React, { memo } from "react";
 import PropTypes from "prop-types";
 import { Switch } from "react-router-dom";
-import { withStyles } from "@material-ui/core";
+import { withStyles } from "@material-ui/styles";
 import PropsRoute from "./shared/PropsRoute";
 
 import Clients from "./clients/Clients";
 import Users from "./users/Users";
 import Materials from "./materials/Materials";
+import Services from "./services/Services";
 import Notes from "./notes/Notes";
 import Orders from "./orders/Orders";
 
@@ -38,7 +39,7 @@ const styles = (theme) => ({
     [theme.breakpoints.up("lg")]: {
       marginTop: theme.spacing(6),
       marginBottom: theme.spacing(6),
-      width: "70%",
+      width: "80%",
       marginLeft: "auto",
       marginRight: "auto",
     },
@@ -58,6 +59,11 @@ function Routing(props) {
         <PropsRoute
           path="/c/orders"
           component={Orders}
+          mainSnackBar={mainSnackBar}
+        />
+        <PropsRoute
+          path="/c/services"
+          component={Services}
           mainSnackBar={mainSnackBar}
         />
         <PropsRoute

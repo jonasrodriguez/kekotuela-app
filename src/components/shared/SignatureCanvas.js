@@ -1,6 +1,7 @@
 import React, { useState, useRef } from "react";
 import SignaturePad from "react-signature-canvas"
-import { Box, Button, Dialog, DialogTitle, DialogContent, DialogActions, withStyles } from '@material-ui/core';
+import { Box, Button, Dialog, DialogTitle, DialogContent, DialogActions } from '@material-ui/core';
+import { withStyles } from "@material-ui/styles";
 
 const styles = {
   sigImage: {
@@ -12,7 +13,7 @@ const styles = {
 };
 
 function SignatureDialog(props) {
-  const { classes, open, onClose, setImageURL } = props;
+  const { open, onClose, setImageURL } = props;
   const sigCanvas = useRef({});
 
   /* a function that uses the canvas ref to clear the canvas 

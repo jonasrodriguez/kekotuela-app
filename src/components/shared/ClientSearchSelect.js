@@ -1,7 +1,7 @@
 import React, { Fragment, useState, useEffect } from "react";
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { TextField, CircularProgress } from "@material-ui/core";
-import { FetchClientList, FilterClientList } from "../api/Client"
+import { FetchClients, FetchClientFilter } from "../shared/api/Clients";
 
 export default function ClientSearchSelect(props) {
     const { onClientSelected } = props;
@@ -11,12 +11,12 @@ export default function ClientSearchSelect(props) {
 
     const onClientChange = async value => {    
         setLoading(true);
-        const clients = await FilterClientList(value);
+        const clients = await FetchClientFilter(value);
         setOptions(clients);
         setLoading(false);
     };
 
-    useEffect(() => { FetchClientList(setOptions); }, [setOptions]); 
+    useEffect(() => { FetchClients(setOptions); }, [setOptions]); 
 
     return (
         <Autocomplete 

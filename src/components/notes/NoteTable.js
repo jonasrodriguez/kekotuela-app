@@ -1,10 +1,12 @@
 import React, { useCallback, useState } from "react";
 import PropTypes from "prop-types";
-import { Box, Grid, Paper, TextField, Typography, withStyles } from "@material-ui/core";
-import { Divider, List, ListItemText, Toolbar, Button } from "@material-ui/core";
+import { withStyles } from "@material-ui/styles";
+import { Box, Grid, Paper, TextField, Typography } from "@material-ui/core";
+import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
 import RowControls from "../shared/RowControls"
 import Pagination from "../shared/Pagination"
-import HighlightedInformation from "../shared/HighlightedInformation";
+import { formatDate } from "../shared/functions/formatDate"
+import HighlightedInformation from "../shared/HighlightedInformation"
 
 const styles = theme => ({
   tableWrapper: {
@@ -14,46 +16,32 @@ const styles = theme => ({
     padding: theme.spacing(2),
     margin: 'auto',
   },
-  blackBackground: {
-    backgroundColor: theme.palette.primary.main
-  },
   contentWrapper: {
     padding: theme.spacing(3),
-    [theme.breakpoints.down("xs")]: {
-      padding: theme.spacing(2)
-    },
     width: "100%"
   },
-  firstData: {
-    paddingLeft: theme.spacing(3)
-  },
-  toolbar: {
-    justifyContent: "space-between"
-  },
-  divider: {
-    backgroundColor: "rgba(0, 0, 0, 0.26)"
-  }
 });
 
 const rowsPerPage = 25;
 
 function NoteTable(props) {
-  const { classes, notes, openNewNote, updateNote, deleteNote } = props;
+  const { classes, notes, updateNote, deleteNote } = props;
   const [page, setPage] = useState(0);
 
   const handleChangePage = useCallback((_, page) => { 
     setPage(page); 
   }, [setPage]);
 
-  const emptyTable = (
-    <Box className={classes.contentWrapper}>
+  if (!notes.length) {
+    return (
+      <Box className={classes.contentWrapper}>
         <HighlightedInformation>
           No hay notas en el sistema.
         </HighlightedInformation>
-      </Box>  
-  );
-
-  const contentTable = (
+      </Box>   
+    );
+  }
+  return (    
     <Box className={classes.tableWrapper}>
       {notes.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
         .map((note, index) => (
@@ -62,6 +50,7 @@ function NoteTable(props) {
             <Grid item xs={3}>
               <Typography variant="body2" color="textSecondary">{note.reference}</Typography>
               <Typography variant="body2" gutterBottom> {note.description}</Typography>
+              <NotificationsActiveIcon color="secondary" display={(note.priority) ? "block" : "none"} />
             </Grid>
             <Grid item xs={4}>                  
               <Typography variant="body2" gutterBottom>
@@ -74,11 +63,13 @@ function NoteTable(props) {
                 {note.client.address}. {note.client.city}, {note.client.cp}
               </Typography>
             </Grid>                
-            <Grid item> 
-                <TextField label="Operario asignado" value={note.user ? note.user.userName : ''} InputProps={{ readOnly: true, }} variant="outlined" size="small" />
-            </Grid>
-            <Grid item> 
-              <TextField label="Fecha prevista" value={note.orderDate} InputProps={{ readOnly: true, }} variant="outlined" size="small" />
+            <Grid container spacing={2} item xs={3}>
+              <Grid item>
+                <TextField label="Operario asignado" value={note.scheduledUser} InputProps={{ readOnly: true, }} variant="outlined" size="small" />
+              </Grid>
+              <Grid item>
+                <TextField label="Fecha programada" value={formatDate(note.scheduledDate, true)} InputProps={{ readOnly: true, }} variant="outlined" size="small" />
+              </Grid>              
             </Grid>
             <Grid item> 
               <RowControls updateItem={() => updateNote(index)} deleteItem={() => deleteNote(index)} />
@@ -88,19 +79,6 @@ function NoteTable(props) {
       ))}      
       <Pagination items={notes} rowsPerPage={rowsPerPage} page={page} handleChangePage={handleChangePage} />
     </Box>
-  );
-
-  return (
-    <List disablePadding>
-      <Toolbar className={classes.toolbar}>
-        <ListItemText primary="Lista de notas" />
-        <Button variant="contained" color="secondary" disableElevation onClick={openNewNote}>
-          Añadir Nota
-        </Button>
-      </Toolbar>
-      <Divider />
-      {notes.length ? contentTable : emptyTable}
-    </List>
   );
 }
 

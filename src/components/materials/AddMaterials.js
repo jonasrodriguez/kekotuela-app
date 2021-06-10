@@ -1,85 +1,74 @@
-import React, { Fragment, useState, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import PropTypes from "prop-types";
-import { Button, Box, Grid, TextField, Typography } from "@material-ui/core";
-import ActionPaper from "../shared/ActionPaper";
-import ButtonCircularProgress from "../shared/ButtonCircularProgress";
-import { EmptyMaterial } from '../models/Material'
-import { PostNewMaterial } from '../api/Material'
+import { Grid, TextField } from "@material-ui/core";
+import { Material } from '../shared/models/Models'
+import { InsertMaterial, UpdateMaterial } from '../shared/api/Materials'
+import AddItemCard from '../shared/AddItemCard'
+
 
 function AddMaterials(props) {
-  const { mainSnackBar, onClose } = props;
-  const material = EmptyMaterial;
-  const [name, setName] = useState(material.name);
-  const [price, setPrice] = useState(material.price);
-  const [description, setDescription] = useState(material.description);
-  const [reference, setReference] = useState(material.reference);
+  const { mainSnackBar, onClose, updateInfo } = props;
+  const [material, setMaterial] = useState((updateInfo.update) ? updateInfo.material : Material);
 
-  const handlePost = useCallback((response) => {    
-    material.clearMaterial();
-    mainSnackBar({ text: "Material añadido correctamente.", isError: false });
-    onClose();
-  }, [onClose]); 
+  const handlePost = useCallback((response) => {
+    if (response.status >= 200 && response.status < 300) {
+      mainSnackBar({ text: "Material guardado correctamente.", isError: false});
+      onClose();
+    }
+    else {
+      mainSnackBar({ text: "Error al guardar el material!", isError: true});
+    }
+  }, [mainSnackBar, onClose]);
   
+  const onValidation = () => {
+    var correct = true;
+
+    if (correct) {
+      (updateInfo.update) 
+        ? UpdateMaterial(material._id, material, handlePost)
+        : InsertMaterial(material, handlePost);
+    }
+  }
+
+  const content = (
+    <Grid container spacing={2} justify="space-between">
+      <Grid item xs={3}>
+        <TextField label="Nombre" variant="outlined" fullWidth autoFocus required
+          value={material.name} onChange={(event) => {setMaterial({...material, name: event.target.value})}}
+        />
+      </Grid>
+      <Grid item xs={2}>
+        <TextField label="Precio" variant="outlined" fullWidth required
+          value={material.price} onChange={(event) => {setMaterial({...material, price: event.target.value})}}
+        />
+      </Grid>
+      <Grid item xs={2}>
+        <TextField label="Referencia" variant="outlined" fullWidth required
+          value={material.reference} onChange={(event) => {setMaterial({...material, reference: event.target.value})}}
+        />
+      </Grid>
+      <Grid item xs={5}/>                          
+      <Grid item xs={8}>
+        <TextField label="Descripcion" variant="outlined" multiline fullWidth rows={4} rowsMax={4}
+            value={material.description} onChange={(event) => {setMaterial({...material, description: event.target.value})}}
+        />    
+      </Grid>                     
+    </Grid>   
+  );
+
   return (
-    <Fragment>
-      <ActionPaper
-        helpPadding
-        content={          
-          <Fragment>
-            <Grid container spacing={2} justify="flex-start" >
-              <Grid item xs={10}>
-                <Typography variant="h6" gutterBottom>
-                  Añadir material
-                </Typography>
-              </Grid>
-              <Grid item xs={3}>
-                <TextField label="Nombre" variant="outlined" value={name} 
-                  onChange={(event) =>{setName(event.target.value); material.name = event.target.value;}} 
-                />
-              </Grid>
-              <Grid item xs={2}>
-                <TextField label="Precio" variant="outlined" value={price} 
-                  onChange={(event) =>{setPrice(event.target.value); material.price = event.target.value;}}
-                />
-              </Grid>
-              <Grid item xs={2}>
-                <TextField label="Referencia" variant="outlined" value={reference} 
-                  onChange={(event) =>{setReference(event.target.value); material.reference = event.target.value;}}
-                />
-              </Grid>
-              <Grid item xs={6}/>                          
-              <Grid item xs={8}>
-                <TextField label="Descripcion" variant="outlined" value={description}
-                  multiline fullWidth={true}  rows={4} rowsMax={4} 
-                  onChange={(event) =>{setDescription(event.target.value);  material.description = event.target.value;}}
-                />    
-              </Grid>                     
-            </Grid>                      
-          </Fragment> 
-        }
-        actions={
-          <Fragment>
-            <Box mr={1}>
-              <Button onClick={onClose}>
-                Cancelar
-              </Button>
-            </Box>
-            <Button
-              onClick={ () => { PostNewMaterial(material, handlePost) } }
-              variant="contained"
-              color="secondary">
-              Guardar {<ButtonCircularProgress />}
-            </Button>
-          </Fragment>
-        }
-      />
-    </Fragment>
+    <AddItemCard 
+      title="Añadir material"
+      content={content}      
+      onOk={() => { onValidation() }}
+      onCancel={onClose}
+    />
   );
 }
 
 AddMaterials.propTypes = {
   onClose: PropTypes.func,
-  pushMessageToSnackbar: PropTypes.func,
+  mainSnackBar: PropTypes.func,
 };
 
 export default AddMaterials;

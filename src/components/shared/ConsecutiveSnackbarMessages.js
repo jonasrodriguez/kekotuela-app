@@ -1,7 +1,7 @@
 import React, { useCallback, useState, useRef, useEffect } from "react";
 import PropTypes from "prop-types";
-import { Snackbar, withStyles } from "@material-ui/core";
-import MuiAlert from '@material-ui/lab/Alert';
+import { Alert, Snackbar } from "@material-ui/core";
+import { withStyles } from "@material-ui/styles";
 
 const styles = (theme) => ({
   root: {
@@ -10,10 +10,6 @@ const styles = (theme) => ({
     paddingBottom: 0,
   },
 });
-
-function Alert(props) {
-  return <MuiAlert elevation={6} variant="filled" {...props} />;
-}
 
 function ConsecutiveSnackbars(props) {
   const { classes, getMessageToSnackBar } = props;

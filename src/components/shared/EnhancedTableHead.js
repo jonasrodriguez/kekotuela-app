@@ -1,7 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 import classNames from "classnames";
-import { Typography, TableCell, TableHead, TableRow, TableSortLabel, withStyles } from "@material-ui/core";
+import { withStyles } from "@material-ui/styles";
+import { Typography, TableCell, TableHead, TableRow, TableSortLabel } from "@material-ui/core";
 
 const styles = theme => ({
   tableSortLabel: {
@@ -28,8 +29,7 @@ function EnhancedTableHead(props) {
         {rows.map((row, index) => (
           <TableCell
             key={index}
-            align={row.numeric ? "right" : "inherit"}
-            padding="default"
+            align={row.numeric ? "right" : "inherit"}            
             className={index === 0 ? classes.paddingFix : null}
           >            
             <TableSortLabel className={classNames(classes.tableSortLabel, classes.noIcon)}>

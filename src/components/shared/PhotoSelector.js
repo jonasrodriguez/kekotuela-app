@@ -1,6 +1,6 @@
 import React, { Fragment, useCallback } from "react";
 import PropTypes from "prop-types";
-import { withStyles } from "@material-ui/core";
+import { withStyles } from "@material-ui/styles";
 import Dropzone from "./Dropzone";
 
 const styles = (theme) => ({

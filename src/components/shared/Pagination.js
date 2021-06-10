@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { TablePagination, withStyles } from "@material-ui/core";
+import { TablePagination } from "@material-ui/core";
+import { withStyles } from "@material-ui/styles";
 
 const styles = theme => ({
     dBlock: {

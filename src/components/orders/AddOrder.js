@@ -1,26 +1,17 @@
 import React, { useState, useCallback } from "react";
 import PropTypes from "prop-types";
-import { Button, Grid, Fab, withStyles } from "@material-ui/core";
-import { Card, CardHeader, CardContent, CardActions, Typography } from "@material-ui/core";
+import { Card, CardHeader, CardContent, Grid, Fab, Typography } from "@material-ui/core";
 import DeleteIcon from '@material-ui/icons/Delete';
-import ButtonCircularProgress from "../shared/ButtonCircularProgress";
-import NoteSearchSelect from "../shared/NoteSearchSelect"
-import MaterialSelector from './MaterialSelector'
-import PhotoSelector from '../shared/PhotoSelector'
-import SignatureCanvas from "../shared/SignatureCanvas"
-import { PostNewOrder } from "../api/Order"
-import { Client, Order, Note } from "../models/Models"
-
-const styles = ({
-  mainCard: {    
-    border: "none",  
-    boxShadow: "none",
-    padding: '10px'
-  },
-});
+import NoteSearchSelect from "../shared/NoteSearchSelect";
+import MaterialSelector from './MaterialSelector';
+import PhotoSelector from '../shared/PhotoSelector';
+import SignatureCanvas from "../shared/SignatureCanvas";
+import { InsertOrder, UpdateOrder } from '../shared/api/Orders';
+import { Client, Order, Note } from "../shared/models/Models";
+import AddItemCard from '../shared/AddItemCard'
 
 function AddOrder(props) {
-  const { classes, onClose, mainSnackBar } = props;
+  const { onClose, mainSnackBar, updateInfo } = props;
   const [order, setOrder] = useState(Order);
   const [note, setNote] = useState(Note);
   const [client, setClient] = useState(Client);
@@ -57,6 +48,16 @@ function AddOrder(props) {
     }
   }, [onClose]);
 
+  const onValidation = () => {
+    var correct = true;
+
+    if (correct) {
+      (updateInfo.update) 
+        ? UpdateOrder(note._id, note, handlePost)
+        : InsertOrder(note, handlePost);
+    }
+  }
+
   const NoteDetails = (
     <Grid container spacing={2}>
       <Grid item xs={6}>
@@ -92,81 +93,68 @@ function AddOrder(props) {
     </Grid>
   ); 
 
+  const content = (
+    <Grid container spacing={2}>
+      <Grid item xs={12}>
+        <Card variant="outlined">
+          <CardHeader subheader= "Nota"/>
+          <CardContent>                    
+            {showNoteInfo ? NoteDetails : noteSelection}
+          </CardContent>
+        </Card>
+      </Grid>
+      <Grid item xs={12}>
+        <MaterialSelector materialList={note.materials} saveMaterials={saveMaterials} />
+      </Grid>
+      <Grid item xs={6}>
+        <Card variant="outlined">
+          <CardHeader subheader= "Fotos antes"/>
+          <CardContent>
+            <PhotoSelector mainSnackBar={mainSnackBar}/>
+          </CardContent>
+        </Card>
+      </Grid>
+      <Grid item xs={6}>
+        <Card variant="outlined">
+          <CardHeader subheader= "Fotos despues"/>
+          <CardContent>                    
+            <PhotoSelector mainSnackBar={mainSnackBar}/>
+          </CardContent>
+        </Card>
+      </Grid>
+      <Grid item xs={3}>
+        <Card variant="outlined">
+          <CardHeader subheader= "Firma operario"/>
+          <CardContent>
+            <SignatureCanvas />
+          </CardContent>
+        </Card>
+      </Grid>
+      <Grid item xs={6}/>
+      <Grid item xs={3}>
+        <Card variant="outlined">
+          <CardHeader subheader= "Firma cliente"/>
+          <CardContent>
+            <SignatureCanvas />
+          </CardContent>
+        </Card>
+      </Grid>                                          
+    </Grid>
+  );
+
   return (
-    <Card className={classes.mainCard}>
-      <CardHeader title="Crear nuevo albaran" titleTypographyProps={{variant:'h6'}} />
-      <CardContent>
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <Card variant="outlined">
-              <CardHeader subheader= "Nota"/>
-              <CardContent>                    
-                {showNoteInfo ? NoteDetails : noteSelection}
-              </CardContent>
-            </Card>
-          </Grid>
-          <Grid item xs={12}>
-            <MaterialSelector materialList={note.materials} saveMaterials={saveMaterials} />
-          </Grid>
-          <Grid item xs={6}>
-            <Card variant="outlined">
-              <CardHeader subheader= "Fotos antes"/>
-              <CardContent>
-                <PhotoSelector mainSnackBar={mainSnackBar}/>
-              </CardContent>
-            </Card>
-          </Grid>
-          <Grid item xs={6}>
-            <Card variant="outlined">
-              <CardHeader subheader= "Fotos despues"/>
-              <CardContent>                    
-                <PhotoSelector mainSnackBar={mainSnackBar}/>
-              </CardContent>
-            </Card>
-          </Grid>
-          <Grid item xs={3}>
-            <Card variant="outlined">
-              <CardHeader subheader= "Firma operario"/>
-              <CardContent>
-                <SignatureCanvas />
-              </CardContent>
-            </Card>
-          </Grid>
-          <Grid item xs={6}/>
-          <Grid item xs={3}>
-            <Card variant="outlined">
-              <CardHeader subheader= "Firma cliente"/>
-              <CardContent>
-                <SignatureCanvas />
-              </CardContent>
-            </Card>
-          </Grid>                                          
-        </Grid>          
-      </CardContent>
-      <CardActions>
-        <Grid container spacing={2} justify="flex-end">
-          <Grid item>
-            <Button onClick={onClose}>
-              Cancelar
-            </Button>             
-          </Grid>
-          <Grid item>
-            <Button
-              onClick={ () => { PostNewOrder(order, handlePost) } }
-              variant="contained"
-              color="secondary">
-              Guardar {<ButtonCircularProgress />}
-            </Button>            
-          </Grid>          
-        </Grid>
-      </CardActions>
-    </Card>
+    <AddItemCard 
+      title="Añadir parte"
+      content={content}      
+      onOk={() => { onValidation() }}
+      onCancel={onClose}
+    />
   );
 }
 
 AddOrder.propTypes = {
   onClose: PropTypes.func,
-  pushMessageToSnackbar: PropTypes.func,
+  mainSnackBar: PropTypes.func,
 };
 
-export default withStyles(styles)(AddOrder);
+export default AddOrder;
