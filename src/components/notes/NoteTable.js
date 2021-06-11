@@ -25,12 +25,23 @@ const styles = theme => ({
 const rowsPerPage = 25;
 
 function NoteTable(props) {
-  const { classes, notes, updateNote, deleteNote } = props;
+  const { classes, notes, updateNote, deleteNote, filters } = props;
   const [page, setPage] = useState(0);
 
   const handleChangePage = useCallback((_, page) => { 
     setPage(page); 
   }, [setPage]);
+
+  const filterNote = (note) => {
+    var filter = true;
+    if (filters.priority && !note.priority) {
+      return false;
+    }
+    if (filters.scheduled && note.scheduledDate) {
+      return false;
+    }    
+    return filter;
+  }
 
   if (!notes.length) {
     return (
@@ -44,13 +55,16 @@ function NoteTable(props) {
   return (    
     <Box className={classes.tableWrapper}>
       {notes.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+        .filter(note => { return filterNote(note) })
         .map((note, index) => (
         <Paper variant="outlined" className={classes.paper} key={index}>
           <Grid container spacing={2}>
             <Grid item xs={3}>
               <Typography variant="body2" color="textSecondary">{note.reference}</Typography>
               <Typography variant="body2" gutterBottom> {note.description}</Typography>
-              <NotificationsActiveIcon color="secondary" display={(note.priority) ? "block" : "none"} />
+              <Box display={(note.priority) ? "block" : "none"}>
+                <NotificationsActiveIcon color="secondary" />
+              </Box>
             </Grid>
             <Grid item xs={4}>                  
               <Typography variant="body2" gutterBottom>
@@ -88,7 +102,8 @@ NoteTable.propTypes = {
   notes: PropTypes.arrayOf(PropTypes.object).isRequired,
   openNewNote: PropTypes.func.isRequired,
   updateNote: PropTypes.func.isRequired,
-  deleteNote: PropTypes.func.isRequired,  
+  deleteNote: PropTypes.func.isRequired,
+  filters: PropTypes.object.isRequired,
 };
 
 export default withStyles(styles, { withTheme: true })(NoteTable);

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Autocomplete from '@material-ui/lab/Autocomplete';
-import { TextField } from "@material-ui/core";
+import { Autocomplete, TextField } from "@material-ui/core";
 import { FetchUsers } from "../shared/api/Users";
 
 export default function UserSearchSelect(props) {

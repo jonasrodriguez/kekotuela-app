@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Autocomplete from '@material-ui/lab/Autocomplete';
-import { TextField } from "@material-ui/core";
+import { Autocomplete, TextField } from "@material-ui/core";
 import { FetchNotes } from "../shared/api/Notes";
 
 export default function NoteSearchSelect(props) {
