@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from "react";
 import PropTypes from "prop-types";
-import { Box, Table, TableRow, TableBody, TableCell, TextField, ButtonGroup, IconButton } from "@material-ui/core";
+import { Box, Table, TableRow, TableBody, TableCell, TextField, ButtonGroup, Button } from "@material-ui/core";
 import CancelIcon from '@material-ui/icons/Cancel';
 import CheckIcon from '@material-ui/icons/Check';
 import { withStyles } from "@material-ui/styles";
@@ -104,13 +104,13 @@ function LaborersTable(props) {
           <TextField type="number" size="small" variant="standard" value={laborer.costHour} onChange={(event) => {setLaborer({...laborer, costHour: event.target.value})}} />
         </TableCell>
         <TableCell component="th" scope="row">
-          <ButtonGroup variant="contained" size="small">
-            <IconButton onClick={onUpdateLaborer}>
+          <ButtonGroup size="small">
+            <Button variant="outlined" onClick={onUpdateLaborer}>
               <CheckIcon fontSize="small" />
-            </IconButton>
-            <IconButton onClick={onCancel}>
+            </Button>
+            <Button variant="outlined" onClick={onCancel}>
               <CancelIcon color="secondary" fontSize="small" />
-            </IconButton>
+            </Button>
           </ButtonGroup>
         </TableCell>                               
       </TableRow>
@@ -135,7 +135,6 @@ function LaborersTable(props) {
 
 LaborersTable.propTypes = {
     classes: PropTypes.object.isRequired,
-    mainSnackBar: PropTypes.func.isRequired,
     deleteItem: PropTypes.func.isRequired,
     updateContent: PropTypes.func.isRequired,
 };

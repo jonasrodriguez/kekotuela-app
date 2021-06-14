@@ -8,29 +8,9 @@ import Pagination from "../shared/Pagination";
 import RowControls from "../shared/RowControls";
 
 const styles = theme => ({
-    tableWrapper: {
-        width: "100%"
-    },
-    paper: {
-        padding: theme.spacing(2),
-        margin: 'auto',
-    },
-    blackBackground: {
-        backgroundColor: theme.palette.primary.main
-    },
-    contentWrapper: {
-        padding: theme.spacing(3),
-        [theme.breakpoints.down("xs")]: {
-            padding: theme.spacing(2)
-        },
-        width: "100%"
-    },
-    firstData: {
-        paddingLeft: theme.spacing(3)
-    },
-    divider: {
-        backgroundColor: "rgba(0, 0, 0, 0.26)"
-    }
+  contentWrapper: {
+    padding: theme.spacing(3),
+  },
 });
 
 const rows = [
@@ -39,27 +19,25 @@ const rows = [
       label: "Nombre"
     },
     {
-      id: "date",
-      label: "Precio"
+      id: "reference",
+      label: "Referencia"
     },
     {
-      id: "city",
-      label: "Referencia"
+      id: "cost",
+      label: "Precio"
     },
     {
       id: "actions",
     },
 ];
 
-const rowsPerPage = 25;
-
 function MaterialsTable(props) {
     const { classes, materials, filter, updateItem, deleteItem } = props;
-    const [page, setPage] = useState(0);
+    const [page, setPage] = useState({page:0, rowsPerPage:10});
 
-    const handleChangePage = useCallback((_, page) => { 
-        setPage(page); 
-    }, [setPage]);    
+    const onChangePage = useCallback((page) => { 
+      setPage(page); 
+    }, [setPage]); 
 
     if (!materials.length) {
       return (
@@ -72,32 +50,32 @@ function MaterialsTable(props) {
     }
 
     return (
-      <Box className={classes.tableWrapper}>
+      <Box>
         <Table aria-labelledby="tableTitle">
           <EnhancedTableHead rowCount={materials.length} rows={rows} />
           <TableBody>
-            {materials
+            {materials              
               .filter(mat => { return mat.name.toLowerCase().startsWith(filter) || mat.reference.toLowerCase().startsWith(filter) })
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .slice(page.page * page.rowsPerPage, page.page * page.rowsPerPage + page.rowsPerPage)
               .map((material, index) => (
               <TableRow hover tabIndex={-1} key={index}>
-                <TableCell component="th" scope="row" className={classes.firstData}>
-                  {material.name}
-                </TableCell>
                 <TableCell component="th" scope="row">
-                  {material.price}
+                  {material.name}
                 </TableCell>
                 <TableCell component="th" scope="row">
                   {material.reference}
                 </TableCell>
                 <TableCell component="th" scope="row">
+                  {material.price} €
+                </TableCell>                
+                <TableCell component="th" scope="row">
                   <RowControls updateItem={() => updateItem(index)} deleteItem={() => deleteItem(index)}/>
                 </TableCell>                               
               </TableRow>
             ))}
-            </TableBody>
-          </Table>
-        <Pagination items={materials} rowsPerPage={rowsPerPage} page={page} handleChangePage={handleChangePage} />
+          </TableBody>
+        </Table>
+        <Pagination items={materials} page={page} onChangePage={onChangePage} />
       </Box>    
     );
 }

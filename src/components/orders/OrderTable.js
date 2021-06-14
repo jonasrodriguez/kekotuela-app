@@ -6,27 +6,21 @@ import HighlightedInformation from "../shared/HighlightedInformation"
 import Pagination from "../shared/Pagination"
 import RowControls from "../shared/RowControls"
 
-const rowsPerPage = 25;
-
 const styles = theme => ({
-    tableWrapper: {
-      width: "100%"
-    },
-    paper: {
-        padding: theme.spacing(2),
-        margin: 'auto',
-    },
-    contentWrapper: {
-      padding: theme.spacing(3),
-      width: "100%"
-    },
+  paper: {
+    padding: theme.spacing(2),
+    margin: 'auto',
+  },
+  contentWrapper: {
+    padding: theme.spacing(3),
+  },
 })
 
 function OrderTable(props) {
   const { classes, orders, updateItem, deleteItem } = props;
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState({page:0, rowsPerPage:10});
 
-  const handleChangePage = useCallback((_, page) => { 
+  const onChangePage = useCallback((page) => { 
       setPage(page); 
   }, [setPage]);
 
@@ -40,8 +34,8 @@ function OrderTable(props) {
     );
   }
   return (
-    <Box className={classes.tableWrapper}>
-      {orders.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+    <Box>
+      {orders
       .map((order, index) => (
         <Paper variant="outlined" className={classes.paper} key={index}>
           <Grid container spacing={2}>
@@ -70,7 +64,7 @@ function OrderTable(props) {
           </Grid>
         </Paper>
       ))}
-      <Pagination items={orders} rowsPerPage={rowsPerPage} page={page} handleChangePage={handleChangePage} />
+      <Pagination items={orders} page={page} onChangePage={onChangePage} />
     </Box>
   );
 }

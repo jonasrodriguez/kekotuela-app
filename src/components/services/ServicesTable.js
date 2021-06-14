@@ -117,7 +117,6 @@ function ServicesTable(props) {
 
 ServicesTable.propTypes = {
     classes: PropTypes.object.isRequired,
-    mainSnackBar: PropTypes.func.isRequired,
     deleteItem: PropTypes.func.isRequired,
     updateContent: PropTypes.func.isRequired,
 };

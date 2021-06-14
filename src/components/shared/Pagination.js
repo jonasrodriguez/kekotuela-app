@@ -1,37 +1,32 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { TablePagination } from "@material-ui/core";
-import { withStyles } from "@material-ui/styles";
-
-const styles = theme => ({
-    dBlock: {
-        display: "block !important"
-    },
-    dNone: {
-        display: "none !important"
-    },
-})
 
 function Pagination(props) {
-  const { classes, items, rowsPerPage, page, handleChangePage } = props;
-    return (
-        <TablePagination
-            component="div"
-            count={items.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            backIconButtonProps={{"aria-label": "Previous Page"}}
-            nextIconButtonProps={{"aria-label": "Next Page"}}
-            onChangePage={handleChangePage}
-            classes={{
-                select: classes.dNone,
-                selectIcon: classes.dNone,
-                actions: items.length > 0 ? classes.dBlock : classes.dNone,
-                caption: items.length > 0 ? classes.dBlock : classes.dNone
-            }}
-            labelRowsPerPage=""
-        />
-    )    
+  const { items, page, onChangePage } = props;
+  const [rowsPerPage, setRowsPerPage] = useState(page.rowsPerPage);
+
+  const handleChangePage = (event, newPage) => {
+    onChangePage({page: newPage, rowsPerPage: page.rowsPerPage});
+  }
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(event.target.value);
+    onChangePage({page: page.page, rowsPerPage: event.target.value});
+  };
+
+  return (
+    <TablePagination
+        component="div"
+        count={items.length}
+        page={page.page}
+        rowsPerPage={rowsPerPage}
+        rowsPerPageOptions={[10, 20, 50]}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+        labelRowsPerPage="Elementos por pagina:"
+    />
+  )    
 }
 
 Pagination.propTypes = {
@@ -40,4 +35,4 @@ Pagination.propTypes = {
     handleChangePage: PropTypes.func
 };
 
-export default withStyles(styles, { withTheme: true })(Pagination);
+export default Pagination;

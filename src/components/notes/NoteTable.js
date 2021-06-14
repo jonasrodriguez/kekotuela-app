@@ -3,32 +3,26 @@ import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/styles";
 import { Box, Grid, Paper, TextField, Typography } from "@material-ui/core";
 import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
-import RowControls from "../shared/RowControls"
-import Pagination from "../shared/Pagination"
-import { formatDate } from "../shared/functions/formatDate"
-import HighlightedInformation from "../shared/HighlightedInformation"
+import RowControls from "../shared/RowControls";
+import Pagination from "../shared/Pagination";
+import { formatDate } from "../shared/functions/formatDate";
+import HighlightedInformation from "../shared/HighlightedInformation";
 
 const styles = theme => ({
-  tableWrapper: {
-    width: "100%"
-  },
   paper: {
     padding: theme.spacing(2),
     margin: 'auto',
   },
   contentWrapper: {
     padding: theme.spacing(3),
-    width: "100%"
   },
-});
-
-const rowsPerPage = 25;
+})
 
 function NoteTable(props) {
   const { classes, notes, updateNote, deleteNote, filters } = props;
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState({page:0, rowsPerPage:10});
 
-  const handleChangePage = useCallback((_, page) => { 
+  const onChangePage = useCallback((page) => { 
     setPage(page); 
   }, [setPage]);
 
@@ -53,8 +47,8 @@ function NoteTable(props) {
     );
   }
   return (    
-    <Box className={classes.tableWrapper}>
-      {notes.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+    <Box>
+      {notes
         .filter(note => { return filterNote(note) })
         .map((note, index) => (
         <Paper variant="outlined" className={classes.paper} key={index}>
@@ -91,7 +85,7 @@ function NoteTable(props) {
           </Grid>
         </Paper>
       ))}      
-      <Pagination items={notes} rowsPerPage={rowsPerPage} page={page} handleChangePage={handleChangePage} />
+      <Pagination items={notes} page={page} onChangePage={onChangePage} />
     </Box>
   );
 }

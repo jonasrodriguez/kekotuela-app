@@ -1,25 +1,18 @@
-import React from "react";
+import React, { useState, useCallback } from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/styles";
 import { Box, Table, TableBody, TableCell, TableRow } from "@material-ui/core";
 import EnhancedTableHead from "../shared/EnhancedTableHead";
 import HighlightedInformation from "../shared/HighlightedInformation";
 import RowControls from "../shared/RowControls"
+import Pagination from "../shared/Pagination";
 import CheckIcon from '@material-ui/icons/Check';
 import CloseIcon from '@material-ui/icons/Close';
 
 const styles = theme => ({
-  tableWrapper: {
-    overflowX: "auto",
-    width: "100%"
-  },
   contentWrapper: {
     padding: theme.spacing(3),
-    width: "100%"
   },
-  firstData: {
-    paddingLeft: theme.spacing(3)
-  }
 });
 
 const rows = [
@@ -50,6 +43,11 @@ const rows = [
 
 function UserTable(props) {
   const { classes, users, filterUsers, updateItem, deleteItem } = props;
+  const [page, setPage] = useState({page:0, rowsPerPage:10});
+
+  const onChangePage = useCallback((page) => { 
+    setPage(page); 
+  }, [setPage]);
 
   if (!users.length) {
     return (
@@ -61,7 +59,7 @@ function UserTable(props) {
     );
   }
   return (
-    <Box className={classes.tableWrapper}>
+    <Box>
       <Table aria-labelledby="tableTitle">
         <EnhancedTableHead rowCount={users.length} rows={rows} />
         <TableBody>
@@ -70,7 +68,7 @@ function UserTable(props) {
               || user.email.startsWith(filterUsers) || user.phone.startsWith(filterUsers) })
             .map((user, index) => (
               <TableRow hover tabIndex={-1} key={index}>
-                <TableCell component="th" scope="row" className={classes.firstData}>
+                <TableCell component="th" scope="row">
                   {user.userName}
                 </TableCell>
                 <TableCell component="th" scope="row">
@@ -92,6 +90,7 @@ function UserTable(props) {
             ))}
         </TableBody>
       </Table>
+      <Pagination items={users} page={page} onChangePage={onChangePage} />
     </Box>
   );
 }

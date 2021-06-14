@@ -7,7 +7,7 @@ import SearchIcon from '@material-ui/icons/Search';
 const styles = {
   title: {
     flexGrow: 1,
-  },  
+  },
 };
 
 function SectionHeader(props) {
@@ -17,8 +17,8 @@ function SectionHeader(props) {
     <Toolbar className={classes.appbar}>
       <Typography variant="h6" className={classes.title}>
         {title}
-      </Typography>      
-      <TextField type="search" variant="standard"
+      </Typography>    
+      <TextField type="search" variant="standard" 
         onChange={ev => {searchFunc(ev.target.value.toLowerCase())}}
         InputProps={{
           startAdornment: (

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { TableRow, TableCell, TextField, ButtonGroup, IconButton } from "@material-ui/core";
+import { TableRow, TableCell, TextField, ButtonGroup, Button } from "@material-ui/core";
 import CancelIcon from '@material-ui/icons/Cancel';
 import CheckIcon from '@material-ui/icons/Check';
 
@@ -33,13 +33,13 @@ function AddItem (props) {
         <TextField type="number" size="small" variant="standard" value={price} onChange={(event) => {setPrice(event.target.value)}} />
       </TableCell>
       <TableCell component="th" scope="row">
-        <ButtonGroup variant="contained" size="small">
-          <IconButton onClick={onSaveClick}>
+        <ButtonGroup size="small">
+          <Button variant="outlined" onClick={onSaveClick}>
             <CheckIcon fontSize="small" />
-          </IconButton>
-          <IconButton onClick={onClear}>
+          </Button>
+          <Button variant="outlined" onClick={onClear}>
             <CancelIcon color="secondary" fontSize="small" />
-          </IconButton>
+          </Button>
         </ButtonGroup>
       </TableCell>                               
     </TableRow>

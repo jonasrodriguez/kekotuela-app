@@ -8,29 +8,9 @@ import HighlightedInformation from "../shared/HighlightedInformation";
 import Pagination from "../shared/Pagination";
 
 const styles = theme => ({
-  tableWrapper: {
-    overflowX: "auto",
-    width: "100%"
-  },
-  blackBackground: {
-    backgroundColor: theme.palette.primary.main
-  },
   contentWrapper: {
     padding: theme.spacing(3),
-    [theme.breakpoints.down("xs")]: {
-      padding: theme.spacing(2)
-    },
-    width: "100%"
   },
-  dBlock: {
-    display: "block !important"
-  },
-  dNone: {
-    display: "none !important"
-  },
-  firstData: {
-    paddingLeft: theme.spacing(3)
-  }
 });
 
 const rows = [
@@ -55,15 +35,13 @@ const rows = [
   }
 ];
 
-const rowsPerPage = 25;
-
 function ClientTable(props) {
   const { classes, clients, filter, updateItem, deleteItem } = props;
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState({page:0, rowsPerPage:10});
 
-  const handleChangePage = useCallback((_, page) => { 
+  const onChangePage = useCallback((page) => { 
     setPage(page); 
-  }, [setPage]);  
+  }, [setPage]);
 
   if (!clients.length) {
     return (
@@ -75,17 +53,16 @@ function ClientTable(props) {
     );
   }
   return (
-    <Box className={classes.tableWrapper}>
+    <Box>
       <Table aria-labelledby="tableTitle">
         <EnhancedTableHead rowCount={clients.length} rows={rows} />
         <TableBody>
           {clients
             .filter(user => { return user.name.toLowerCase().startsWith(filter) || user.surname.toLowerCase().startsWith(filter)
               || user.dni.toLowerCase().startsWith(filter) || user.phone.startsWith(filter) })
-            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             .map((client, index) => (
               <TableRow hover tabIndex={-1} key={index}>
-                <TableCell component="th" scope="row" className={classes.firstData}>
+                <TableCell component="th" scope="row">
                   {client.name + ' ' + client.surname}
                 </TableCell>
                 <TableCell component="th" scope="row">
@@ -104,7 +81,7 @@ function ClientTable(props) {
             ))}
         </TableBody>
       </Table>
-      <Pagination items={clients} rowsPerPage={rowsPerPage} page={page} handleChangePage={handleChangePage} />
+      <Pagination items={clients} page={page} onChangePage={onChangePage} />
     </Box>
   );
 }

@@ -68,7 +68,6 @@ function Services(props) {
 
 Services.propTypes = {
   classes: PropTypes.object.isRequired,
-  mainSnackBar: PropTypes.func.isRequired,
 }
 
 export default withStyles(styles)(Services);
