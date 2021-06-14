@@ -50,7 +50,6 @@ AddItem.propTypes = {
   index: PropTypes.number.isRequired,
   onSave: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired,
-  type: PropTypes.string.isRequired,
 };
 
 export default AddItem;

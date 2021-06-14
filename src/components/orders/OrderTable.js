@@ -51,20 +51,17 @@ function OrderTable(props) {
               <Grid item xs={4}>                  
                   <Typography variant="body2" gutterBottom>
                       {order.note.description}
-                  </Typography>
-                  <Typography variant="body2" color="textSecondary" gutterBottom>
-                      Total: {order.total} €
-                  </Typography>
+                  </Typography>                 
               </Grid>
               <Grid item xs={4}>                  
                   <Typography variant="body2" gutterBottom>
-                      {order.note.client.name} {order.note.client.surname} {order.note.client.second_surname}
+                      {order.client.name} {order.client.surname} {order.client.second_surname}
                   </Typography>
                   <Typography variant="body2" color="textSecondary" gutterBottom>
-                      {order.note.client.phone} - {order.note.client.email}
+                      {order.client.phone} - {order.client.email}
                   </Typography>
                   <Typography variant="body2" color="textSecondary">
-                      {order.note.client.address}. {order.note.client.city}, {order.note.client.cp}
+                      {order.client.address}. {order.client.city}, {order.client.cp}
                   </Typography>
               </Grid>
               <Grid item>

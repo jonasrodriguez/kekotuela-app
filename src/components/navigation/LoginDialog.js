@@ -53,6 +53,20 @@ function LoginDialog(props) {
   const loginEmail = useRef();
   const loginPassword = useRef(); 
 
+  const loginResponse = useCallback((data) => {
+    if (data) {
+      Auth.username = data.user;
+      Auth.token = data.token;
+      Auth.loginStatus = true;
+      onClose();
+    }
+    else {
+      setStatus("loginError");
+    }
+    setIsLoading(false);
+
+  }, [onClose, setIsLoading]);
+
   const login = useCallback(() => {
     Auth.loginStatus = true;
     setIsLoading(true);        
@@ -71,21 +85,8 @@ function LoginDialog(props) {
     else {
       Login(loginEmail.current.value, loginPassword.current.value, loginResponse);
     }
-  }, [setIsLoading, loginEmail, loginPassword]);
+  }, [setIsLoading, loginEmail, loginPassword, loginResponse]);
 
-  const loginResponse = useCallback((data) => {
-    if (data) {
-      Auth.username = data.user;
-      Auth.token = data.token;
-      Auth.loginStatus = true;
-      onClose();
-    }
-    else {
-      setStatus("loginError");
-    }
-    setIsLoading(false);
-
-  }, [setIsLoading]);
 
   return (
     <Dialog  open={open} onClose={onClose} classes={{ paper: classes.dialogPaper }} >
@@ -114,8 +115,8 @@ function LoginDialog(props) {
           inputRef={loginPassword}
           autoComplete="off"
           helperText={
-            status === "invalidPassword" || status === "loginError" &&
-            "Usuario o Password incorrecto."
+            status === "invalidPassword" || (status === "loginError" &&
+            "Usuario o Password incorrecto.")
           }
           FormHelperTextProps={{ error: true }}
           onVisibilityChange={setIsPasswordVisible}

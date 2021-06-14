@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Autocomplete, TextField } from "@material-ui/core";
-import { FetchUsers } from "../shared/api/Users";
+import { FetchUsers } from "./api/Users";
 
-export default function UserSearchSelect(props) {
+export default function SearchSelectUser(props) {
     const { onOptionSelected } = props;
     const [open, setOpen] = useState(false);
     const [options, setOptions] = useState([]);

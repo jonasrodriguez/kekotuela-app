@@ -2,76 +2,55 @@ import React, { useCallback } from "react";
 import PropTypes from "prop-types";
 import { Card, CardHeader, CardContent, TextField, IconButton } from "@material-ui/core";
 import { Table, TableHead, TableRow, TableBody, TableCell, Typography } from "@material-ui/core";
+import SearchSelectLaborer from '../shared/SearchSelectLaborer';
 import DeleteIcon from '@material-ui/icons/Delete';
-import MaterialSearchSelect from '../shared/SearchSelectMaterial';
 
 const headers = [
   {
-    id:'ref',
+    id:'name',
     name:'Nombre',
   },
   {
-    id:'name',
-    name:'Referencia',
-  },
-  {
     id:'hours',
-    name:'Precio',
-  },
-  {
-    id:'hours',
-    name:'Cantidad',
-  },
-  {
-    id:'hours',
-    name:'Total',
+    name:'Horas',
   },
   {
     id:'controls',
   },
 ]
 
-function MaterialSelector(props) {
-  const { materials, onUpdateMaterials } = props;
+function LaborerSelector(props) {
+  const { laborers, onUpdateLaborers } = props;
 
-  const onInsert = useCallback((material) => {
-    onUpdateMaterials([...materials, material]);    
-  }, [materials, onUpdateMaterials]);
+  const onInsert = useCallback((selectedLaborer) => {
+    onUpdateLaborers([...laborers, selectedLaborer]);    
+  }, [laborers, onUpdateLaborers]);
 
-  const onRemove = useCallback((index) => {
-    onUpdateMaterials(materials.filter((item, idx) => idx !== index))
-  }, [materials, onUpdateMaterials]);
-
-  const onUpdate = useCallback((index, quantity) => {    
-    onUpdateMaterials(
-      materials.map((item, idx) => 
+  const onUpdate = useCallback((index, hours) => {    
+    onUpdateLaborers(
+      laborers.map((item, idx) => 
         idx === index 
-        ? {...item, quantity : quantity, total: item.price * quantity} 
+        ? {...item, hours : hours, total: item.price * hours} 
         : item 
     ))
-  }, [materials, onUpdateMaterials]);
+  }, [laborers, onUpdateLaborers]);
+
+  const onRemove = useCallback((index) => {
+    onUpdateLaborers(laborers.filter((item, idx) => idx !== index))
+  }, [laborers, onUpdateLaborers]);
 
   const tableContent = (  
-    materials
-      .map((mat, index) => (
+    laborers
+      .map((laborer, index) => (
       <TableRow hover key={index}>
         <TableCell component="th" scope="row">
-          {mat.name}
-        </TableCell>
-        <TableCell component="th" scope="row">
-          {mat.reference}
-        </TableCell>
-        <TableCell component="th" scope="row">
-          {mat.price} €
+          {laborer.name}
         </TableCell>
         <TableCell component="th" scope="row">
           <TextField type="number" variant="standard" size="small" InputProps={{ inputProps: { min: 0 } }}
-            value={mat.quantity} onChange={(event) => { onUpdate(index, event.target.value); }}
+            value={laborer.hours} onChange={(event) => { onUpdate(index, event.target.value); }}
           />
         </TableCell>
-        <TableCell component="th" scope="row">
-          {mat.total} €
-        </TableCell>    
         <TableCell component="th" scope="row">
           <IconButton onClick={() => { onRemove(index); }}>
             <DeleteIcon color="secondary" fontSize="small" />
@@ -83,8 +62,8 @@ function MaterialSelector(props) {
 
   return (
     <Card variant="outlined">
-      <CardHeader subheader= "Materiales"/>
-      <CardContent>        
+      <CardHeader subheader="Mano de obra" />
+      <CardContent>
         <Table size="small">
           <TableHead>
             <TableRow>
@@ -100,20 +79,21 @@ function MaterialSelector(props) {
           </TableHead>
           <TableBody>
             {tableContent}
-            <TableRow key={materials.length + 1}>
+            <TableRow key={laborers.length + 1}>
               <TableCell>
-                <MaterialSearchSelect onMaterialSelected={onInsert} />
+                <SearchSelectLaborer onLaborerSelected={onInsert} />
               </TableCell>
             </TableRow>                 
           </TableBody>
         </Table>
-      </CardContent>      
-    </Card>
+      </CardContent>
+    </Card>      
   );
 }
 
-MaterialSelector.propTypes = {
-  materialList: PropTypes.array,
+LaborerSelector.propTypes = {
+  laborers: PropTypes.array.isRequired,
+  onUpdateLaborers: PropTypes.func.isRequired,
 };
 
-export default MaterialSelector;
+export default LaborerSelector;

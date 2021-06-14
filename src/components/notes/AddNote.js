@@ -7,12 +7,12 @@ import esLocale from "date-fns/locale/es";
 import LocalizationProvider from '@material-ui/lab/LocalizationProvider';
 import DateTimePicker from '@material-ui/lab/DateTimePicker';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { Note, Client } from '../shared/models/Models'
-import { InsertNote, UpdateNote } from '../shared/api/Notes'
-import ClientSearchSelect from '../shared/ClientSearchSelect'
-import UserSearchSelect from '../shared/UserSearchSelect'
-import AddClient from '../clients/AddClient'
-import AddItemCard from '../shared/AddItemCard'
+import { Note, Client } from '../shared/models/Models';
+import { InsertNote, UpdateNote } from '../shared/api/Notes';
+import ClientSearchSelect from '../shared/SearchSelectClient';
+import UserSearchSelect from '../shared/SearchSelectUser';
+import AddClient from '../clients/AddClient';
+import AddItemCard from '../shared/AddItemCard';
 
 function AddNote(props) {
   const { mainSnackBar, onClose, updateInfo } = props;

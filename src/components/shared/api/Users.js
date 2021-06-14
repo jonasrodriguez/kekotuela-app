@@ -10,7 +10,7 @@ export const InsertUser = (body, callback) => {
   Insert(uri, body, callback);
 }
 
-export const UpdateUser = (id, body, callback) => {
+export const UpdateUser = (id, body, callback) => {  
   Update(uri+"/"+id, body, callback);
 }
 

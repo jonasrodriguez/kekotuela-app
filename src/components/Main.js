@@ -3,10 +3,9 @@ import PropTypes from "prop-types";
 import classNames from "classnames";
 import { withStyles } from "@material-ui/styles";
 import ConsecutiveSnackbarMessages from "./shared/ConsecutiveSnackbarMessages"
-import LoginDialog from "./navigation/LoginDialog"
+import LoginDialog from "./navigation/LoginDialog";
 import Navigation from "./navigation/Navigation";
 import Routing from "./Routing";
-import Auth from "./shared/Auth"
 
 const styles = (theme) => ({
   main: {
@@ -31,13 +30,9 @@ function Main(props) {
       setMainSnackBar(() => pushMessage);
   },[setMainSnackBar]);
 
-  Auth.username = 'Admin';
-  Auth.token = 'eyJhbGciOiJIUzI1NiJ9.YWRtaW4.c8dsmcHlrMafCg4uSp0sDHlMx84r-ZL0C2L35Bl2v8c';
-  Auth.loginStatus = true;
-
   return (
     <Fragment>
-      {/*<LoginDialog open={openLoginDialog} onClose={() => setOpenLoginDialog(false)} />*/}
+      <LoginDialog open={openLoginDialog} onClose={() => setOpenLoginDialog(false)} />
       <Navigation />
       <ConsecutiveSnackbarMessages getMessageToSnackBar={getMessageToSnackBar} />
       <main className={classNames(classes.main)}>

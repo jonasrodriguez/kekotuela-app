@@ -4,9 +4,10 @@ import { Paper, Divider, List, Grid } from "@material-ui/core";
 import { withStyles } from "@material-ui/styles";
 import ServicesTable from "./ServicesTable";
 import LaborersTable from "./LaborersTable";
-import ServicesHeader from "./ServicesHeader"
-import DeleteDialog from "../shared/DeleteDialog"
-import { FetchServices, FetchLaborers, DeleteService } from "../shared/api/Services"
+import ServicesHeader from "./ServicesHeader";
+import DeleteDialog from "../shared/DeleteDialog";
+import { FetchUsers, DeleteUser } from "../shared/api/Users";
+import { FetchServices, DeleteService } from "../shared/api/Services";
 
 const styles = {
   divider: {
@@ -23,7 +24,7 @@ function Services(props) {
   const [deleteInfo, setDeleteInfo] = useState({open: false, name: '', id: '', message: ''});
 
   useEffect(() => {FetchServices(setServices)}, [setServices]);
-  useEffect(() => {FetchLaborers(setLaborers)}, [setLaborers]);
+  useEffect(() => {FetchUsers(setLaborers)}, [setLaborers]);
 
   const deleteLaborer = useCallback((index) => { 
     const labs = laborers[index];
@@ -38,7 +39,7 @@ function Services(props) {
   const onCloseDelete = () => {
     setDeleteInfo({open: false, name:'', id: '', message:''});
     FetchServices(setServices);
-    FetchLaborers(setLaborers);
+    FetchUsers(setLaborers);
   }
 
   return (
@@ -56,8 +57,8 @@ function Services(props) {
           <List disablePadding>
             <ServicesHeader title="Operarios" searchFunc={value => {setFilterLaborer(value)}} />
             <Divider className={classes.divider} />
-            <LaborersTable laborers={laborers} filter={filterLaborer} mainSnackBar={mainSnackBar} updateLaborer={() => {FetchLaborers(setLaborers)}} deleteItem={deleteLaborer} />
-            <DeleteDialog deleteItem={deleteInfo} onClose={onCloseDelete}  apiCall={DeleteService} mainSnackBar={mainSnackBar} />
+            <LaborersTable laborers={laborers} filter={filterLaborer} mainSnackBar={mainSnackBar} updateLaborer={() => {FetchUsers(setLaborers)}} deleteItem={deleteLaborer} />
+            <DeleteDialog deleteItem={deleteInfo} onClose={onCloseDelete}  apiCall={DeleteUser} mainSnackBar={mainSnackBar} />
           </List> 
         </Grid>
       </Grid>            

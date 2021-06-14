@@ -1,28 +1,34 @@
 import React, { useState, useEffect } from "react";
 import { Autocomplete, TextField } from "@material-ui/core";
-import { FetchMaterials } from '../shared/api/Materials';
+import { FetchServices } from './api/Services';
 
-export default function MaterialSearchSelect(props) {
-    const { onMaterialSelected } = props;
+export default function SearchSelectServices(props) {
+    const { onServiceSelected } = props;
     const [open, setOpen] = useState(false);
     const [options, setOptions] = useState([]);
 
-    useEffect(() => { FetchMaterials(setOptions); }, [setOptions]); 
+    useEffect(() => { FetchServices(setOptions); }, [setOptions]);
+
+    const onChange = (ev, material) => {
+        if (material) {
+            onServiceSelected({name: material.name, price: material.price });
+        }
+    }
 
     return (
         <Autocomplete 
-            style={{ width: 400 }}
+            style={{ width: 250 }}
             open={open}
             onOpen={() => { setOpen(true); }}
             onClose={() => { setOpen(false); }}
-            onChange={(ev, material) => { onMaterialSelected(material); }} 
-            getOptionLabel={(option) => option.reference + " - " + option.name}
+            onChange={onChange} 
+            getOptionLabel={(option) => option.name}
             options={options}
             renderInput={(params) => (
                 <TextField
                     {...params}
-                    label="Seleccione un material"
-                    variant="outlined"                 
+                    label="Seleccione un servicio"
+                    variant="standard"                 
                     InputProps={{
                         ...params.InputProps,
                     }}

@@ -41,7 +41,7 @@ function Orders(props) {
 
   const deleteItem = useCallback((index) => { 
     const order = orders[index];
-    setDeleteInfo({open: true, name: "Albaran", id: order._id, message: "el albaran con referencia " + order.reference});
+    setDeleteInfo({open: true, name: "Parte", id: order._id, message: "el parte con referencia " + order.reference});
   }, [orders]);
 
   const onCloseDelete = () => {
@@ -67,7 +67,7 @@ function Orders(props) {
         </Button>
       </Toolbar>
       <Divider className={classes.divider} />
-      <OrderTable orders={orders} updateOrder={updateItem} deleteOrder={deleteItem} />
+      <OrderTable orders={orders} updateItem={updateItem} deleteItem={deleteItem} />
       <DeleteDialog deleteItem={deleteInfo} onClose={onCloseDelete}  apiCall={DeleteOrder} mainSnackBar={mainSnackBar} />
     </Paper>   
   );

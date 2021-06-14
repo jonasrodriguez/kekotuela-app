@@ -1,11 +1,12 @@
 import React, { useState, useCallback } from "react";
 import PropTypes from "prop-types";
-import { Box, Table, TableRow, TableBody, TableCell } from "@material-ui/core";
+import { Box, Table, TableRow, TableBody, TableCell, TextField, ButtonGroup, IconButton } from "@material-ui/core";
+import CancelIcon from '@material-ui/icons/Cancel';
+import CheckIcon from '@material-ui/icons/Check';
 import { withStyles } from "@material-ui/styles";
 import EnhancedTableHead from "../shared/EnhancedTableHead";
-import RowControls from "../shared/RowControls"
-import AddItem from "./AddItem"
-import { InsertService, UpdateService } from "../shared/api/Services"
+import RowControls from "../shared/RowControls";
+import { UpdateUser } from "../shared/api/Users";
 
 const styles = theme => ({
     tableWrapper: {
@@ -47,72 +48,89 @@ const rows = [
     },
 ];
 
-const emptyUpdate = {update:false, id:'', name:'', price:0}
-
 function LaborersTable(props) {
-    const { classes, laborers, mainSnackBar, filter, updateLaborer, deleteItem } = props;
-    const [updateItem, setUpdateItem] = useState(emptyUpdate);
-    const [updateRow, setUpdateRow] = useState(-1);
+  const { classes, laborers, mainSnackBar, filter, updateLaborer, deleteItem } = props;
+  const[laborer, setLaborer] = useState(null);
+  const[updateRow, setUpdateRow] = useState(-1);
 
-    const onAdd = (id, laborer) => {
-      laborer.type = 'laborer';
-      (updateItem.update) ? UpdateService(id, laborer, handlePost)
-        : InsertService(laborer, handlePost);
-    }
-
-    const onCancel = useCallback(() => {
+  const handlePost = useCallback((response) => {
+    if (response.status >= 200 && response.status < 300) {
+      mainSnackBar({ text: "Servicio guardado correctamente.", isError: false});
       setUpdateRow(-1);
-    }, [setUpdateRow])
-
-    const onUpdate = (index) => {
-      const laborer = laborers[index];
-      setUpdateItem({update:true, id:laborer._id, name:laborer.name, price:laborer.price});
-      setUpdateRow(index);
+      updateLaborer();
     }
+    else {
+      mainSnackBar({ text: "Error al guardar el Servicio!", isError: true});
+    }
+  }, [mainSnackBar, updateLaborer]);
 
-    const handlePost = useCallback((response) => {
-      if (response.status >= 200 && response.status < 300) {
-        mainSnackBar({ text: "Servicio guardado correctamente.", isError: false});
-        setUpdateItem(emptyUpdate);
-        setUpdateRow(-1);
-        updateLaborer();
-      }
-      else {
-        mainSnackBar({ text: "Error al guardar el Servicio!", isError: true});
-      }
-    }, [mainSnackBar, updateLaborer]);
 
-    const readRowData = (service, index) => {
-      return (
-        <TableRow hover tabIndex={-1} key={index}>
-          <TableCell component="th" scope="row" className={classes.firstData}>
-            {service.name}
-          </TableCell>
-          <TableCell component="th" scope="row">
-            {service.price} €
-          </TableCell>
-          <TableCell component="th" scope="row">
-            <RowControls updateItem={() => onUpdate(index)} deleteItem={() => deleteItem(index)}/>
-          </TableCell>
-        </TableRow> 
-      );
-    };
+  const onUpdateLaborer = useCallback(() => {
+    UpdateUser(laborer._id, laborer, handlePost);
+  }, [laborer, handlePost]);
 
+  const onCancel = useCallback(() => {
+    setUpdateRow(-1);
+  }, [setUpdateRow])
+
+  const onUpdateRow = (index) => {
+    setLaborer(laborers[index]);
+    setUpdateRow(index);
+  }
+
+  const readRowData = (user, index) => {
     return (
-      <Box className={classes.tableWrapper}>
-        <Table aria-labelledby="tableTitle">
-          <EnhancedTableHead rowCount={laborers.length} rows={rows} />
-          <TableBody>
-            {laborers
-              .filter(mat => { return mat.name.toLowerCase().startsWith(filter) })
-              .map((service, index) => (
-                (updateRow === index) ? <AddItem index={index} updateItem={updateItem} onSave={onAdd} onCancel={onCancel} /> : readRowData(service, index)
-            ))}
-            <AddItem index={laborers.length + 1} updateItem={updateItem} onSave={onAdd} onCancel={onCancel} />
-        </TableBody>
-        </Table>
-      </Box>    
+      <TableRow hover tabIndex={-1} key={index}>
+        <TableCell component="th" scope="row" className={classes.firstData}>
+          {user.name + ' ' + user.surname}
+        </TableCell>
+        <TableCell component="th" scope="row">
+          {user.costHour} €
+        </TableCell>
+        <TableCell component="th" scope="row">
+          <RowControls updateItem={() => onUpdateRow(index)} deleteItem={() => deleteItem(index)}/>
+        </TableCell>
+      </TableRow> 
     );
+  };
+
+  const updateRowData = (index) => {
+    return (
+      <TableRow hover key={index}>
+        <TableCell component="th" scope="row" className={classes.firstData}>
+          {laborer.name + ' ' + laborer.surname}
+        </TableCell>
+        <TableCell component="th" scope="row">
+          <TextField type="number" size="small" variant="standard" value={laborer.costHour} onChange={(event) => {setLaborer({...laborer, costHour: event.target.value})}} />
+        </TableCell>
+        <TableCell component="th" scope="row">
+          <ButtonGroup variant="contained" size="small">
+            <IconButton onClick={onUpdateLaborer}>
+              <CheckIcon fontSize="small" />
+            </IconButton>
+            <IconButton onClick={onCancel}>
+              <CancelIcon color="secondary" fontSize="small" />
+            </IconButton>
+          </ButtonGroup>
+        </TableCell>                               
+      </TableRow>
+    );
+  }
+
+  return (
+    <Box className={classes.tableWrapper}>
+      <Table aria-labelledby="tableTitle">
+        <EnhancedTableHead rowCount={laborers.length} rows={rows} />
+        <TableBody>
+          {laborers
+            .filter(mat => { return mat.name.toLowerCase().startsWith(filter) })
+            .map((service, index) => (
+              (updateRow === index) ? updateRowData(index) : readRowData(service, index)
+          ))}
+        </TableBody>
+      </Table>
+    </Box>    
+  );
 }
 
 LaborersTable.propTypes = {
