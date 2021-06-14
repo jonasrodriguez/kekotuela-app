@@ -67,7 +67,6 @@ function Materials(props) {
 
 Materials.propTypes = {
   classes: PropTypes.object.isRequired,
-  mainSnackBar: PropTypes.func.isRequired,
 }
 
 export default withStyles(styles)(Materials);

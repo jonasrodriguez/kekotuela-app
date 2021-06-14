@@ -75,7 +75,6 @@ function Orders(props) {
 
 Orders.propTypes = {
   classes: PropTypes.object.isRequired,
-  mainSnackBar: PropTypes.func,
 };
 
 export default withStyles(styles)(Orders);

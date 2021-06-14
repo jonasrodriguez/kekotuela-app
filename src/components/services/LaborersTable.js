@@ -49,7 +49,7 @@ const rows = [
 ];
 
 function LaborersTable(props) {
-  const { classes, laborers, mainSnackBar, filter, updateLaborer, deleteItem } = props;
+  const { classes, laborers, mainSnackBar, filter, updateContent, deleteItem } = props;
   const[laborer, setLaborer] = useState(null);
   const[updateRow, setUpdateRow] = useState(-1);
 
@@ -57,12 +57,12 @@ function LaborersTable(props) {
     if (response.status >= 200 && response.status < 300) {
       mainSnackBar({ text: "Servicio guardado correctamente.", isError: false});
       setUpdateRow(-1);
-      updateLaborer();
+      updateContent();
     }
     else {
       mainSnackBar({ text: "Error al guardar el Servicio!", isError: true});
     }
-  }, [mainSnackBar, updateLaborer]);
+  }, [mainSnackBar, updateContent]);
 
 
   const onUpdateLaborer = useCallback(() => {
@@ -137,7 +137,7 @@ LaborersTable.propTypes = {
     classes: PropTypes.object.isRequired,
     mainSnackBar: PropTypes.func.isRequired,
     deleteItem: PropTypes.func.isRequired,
-    updateLaborer: PropTypes.func.isRequired,
+    updateContent: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles)(LaborersTable);

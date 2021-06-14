@@ -50,7 +50,7 @@ const rows = [
 const emptyUpdate = {update:false, id:'', name:'', price:0}
 
 function ServicesTable(props) {
-    const { classes, services, mainSnackBar, filter, updateService, deleteItem } = props;
+    const { classes, services, mainSnackBar, filter, updateContent, deleteItem } = props;
     const [updateItem, setUpdateItem] = useState(emptyUpdate);
     const [updateRow, setUpdateRow] = useState(-1);
 
@@ -75,12 +75,12 @@ function ServicesTable(props) {
         mainSnackBar({ text: "Servicio guardado correctamente.", isError: false});
         setUpdateItem(emptyUpdate);
         setUpdateRow(-1);
-        updateService();
+        updateContent();
       }
       else {
         mainSnackBar({ text: "Error al guardar el Servicio!", isError: true});
       }
-    }, [mainSnackBar, updateService]);
+    }, [mainSnackBar, updateContent]);
 
     const readRowData = (service, index) => {
       return (
@@ -119,7 +119,7 @@ ServicesTable.propTypes = {
     classes: PropTypes.object.isRequired,
     mainSnackBar: PropTypes.func.isRequired,
     deleteItem: PropTypes.func.isRequired,
-    updateLaborer: PropTypes.func.isRequired,
+    updateContent: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles)(ServicesTable);

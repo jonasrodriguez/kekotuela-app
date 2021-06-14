@@ -100,7 +100,6 @@ NoteTable.propTypes = {
   theme: PropTypes.object.isRequired,
   classes: PropTypes.object.isRequired,
   notes: PropTypes.arrayOf(PropTypes.object).isRequired,
-  openNewNote: PropTypes.func.isRequired,
   updateNote: PropTypes.func.isRequired,
   deleteNote: PropTypes.func.isRequired,
   filters: PropTypes.object.isRequired,

@@ -100,8 +100,8 @@ UserTable.propTypes = {
   theme: PropTypes.object.isRequired,
   classes: PropTypes.object.isRequired,
   users: PropTypes.arrayOf(PropTypes.object).isRequired,
-  updateUser: PropTypes.func.isRequired,
-  deleteUser: PropTypes.func.isRequired,
+  updateItem: PropTypes.func.isRequired,
+  deleteItem: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles, { withTheme: true })(UserTable);

@@ -34,7 +34,6 @@ const styles = (theme) => ({
     flexDirection: "column",
     alignItems: "center",
     paddingBottom: theme.spacing(3),
-    maxWidth: 300
   },
   actions: {
     marginTop: theme.spacing(2)
@@ -89,9 +88,11 @@ function LoginDialog(props) {
 
 
   return (
-    <Dialog  open={open} onClose={onClose} classes={{ paper: classes.dialogPaper }} >
-      <DialogTitle disableTypography>
-        <Typography variant="h5">Login</Typography>
+    <Dialog open={open} classes={{ paper: classes.dialogPaper }} fullWidth maxWidth={'xs'} disableEscapeKeyDown 
+      onClose={(event, reason) => { if (reason !== 'backdropClick') { onClose(); }}}      
+    >
+      <DialogTitle>
+        <Typography component={'span'} variant="h5">Login</Typography>
       </DialogTitle>
       <DialogContent>
         <TextField variant="outlined" margin="normal" required fullWidth label="Nombre Usuario"

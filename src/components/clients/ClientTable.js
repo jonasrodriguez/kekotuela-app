@@ -1,10 +1,11 @@
 import React, { useCallback, useState } from "react";
 import PropTypes from "prop-types";
-import { Box, Table, TableBody, TableCell, TablePagination, TableRow } from "@material-ui/core";
+import { Box, Table, TableBody, TableCell, TableRow } from "@material-ui/core";
 import { withStyles } from "@material-ui/styles";
-import RowControls from "../shared/RowControls"
+import RowControls from "../shared/RowControls";
 import EnhancedTableHead from "../shared/EnhancedTableHead";
 import HighlightedInformation from "../shared/HighlightedInformation";
+import Pagination from "../shared/Pagination";
 
 const styles = theme => ({
   tableWrapper: {
@@ -103,22 +104,7 @@ function ClientTable(props) {
             ))}
         </TableBody>
       </Table>
-      <TablePagination
-        component="div"
-        count={clients.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        backIconButtonProps={{"aria-label": "Previous Page"}}
-        nextIconButtonProps={{"aria-label": "Next Page"}}
-        onChangePage={handleChangePage}
-        classes={{
-          select: classes.dNone,
-          selectIcon: classes.dNone,
-          actions: clients.length > 0 ? classes.dBlock : classes.dNone,
-          caption: clients.length > 0 ? classes.dBlock : classes.dNone
-        }}
-        labelRowsPerPage=""
-      />
+      <Pagination items={clients} rowsPerPage={rowsPerPage} page={page} handleChangePage={handleChangePage} />
     </Box>
   );
 }

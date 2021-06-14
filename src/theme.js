@@ -4,6 +4,7 @@ import { createTheme } from '@material-ui/core/styles';
 const theme = createTheme({
   palette: {
     mode: 'light',
+    secondary: { main: '#ff0f0f' },
     background: {
       default: "#f5f5f5"
     },

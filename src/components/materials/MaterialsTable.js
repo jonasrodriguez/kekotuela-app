@@ -4,8 +4,8 @@ import { Box, Table, TableRow, TableBody, TableCell } from "@material-ui/core";
 import { withStyles } from "@material-ui/styles";
 import HighlightedInformation from "../shared/HighlightedInformation"
 import EnhancedTableHead from "../shared/EnhancedTableHead";
-import Pagination from "../shared/Pagination"
-import RowControls from "../shared/RowControls"
+import Pagination from "../shared/Pagination";
+import RowControls from "../shared/RowControls";
 
 const styles = theme => ({
     tableWrapper: {

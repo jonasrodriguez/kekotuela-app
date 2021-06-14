@@ -49,7 +49,7 @@ function Services(props) {
           <List disablePadding>
             <ServicesHeader title="Servicios" searchFunc={value => {setFilter(value)}} />
             <Divider className={classes.divider} />
-            <ServicesTable services={services} filter={filter} mainSnackBar={mainSnackBar} updateService={() => {FetchServices(setServices)}} deleteItem={deleteService} />
+            <ServicesTable services={services} filter={filter} mainSnackBar={mainSnackBar} updateContent={() => {FetchServices(setServices)}} deleteItem={deleteService} />
             <DeleteDialog deleteItem={deleteInfo} onClose={onCloseDelete}  apiCall={DeleteService} mainSnackBar={mainSnackBar} />
           </List> 
         </Grid>        
@@ -57,7 +57,7 @@ function Services(props) {
           <List disablePadding>
             <ServicesHeader title="Operarios" searchFunc={value => {setFilterLaborer(value)}} />
             <Divider className={classes.divider} />
-            <LaborersTable laborers={laborers} filter={filterLaborer} mainSnackBar={mainSnackBar} updateLaborer={() => {FetchUsers(setLaborers)}} deleteItem={deleteLaborer} />
+            <LaborersTable laborers={laborers} filter={filterLaborer} mainSnackBar={mainSnackBar} updateContent={() => {FetchUsers(setLaborers)}} deleteItem={deleteLaborer} />
             <DeleteDialog deleteItem={deleteInfo} onClose={onCloseDelete}  apiCall={DeleteUser} mainSnackBar={mainSnackBar} />
           </List> 
         </Grid>
