@@ -30,9 +30,10 @@ function Pagination(props) {
 }
 
 Pagination.propTypes = {
-    rowsPerPage: PropTypes.number,
-    page: PropTypes.number,
-    handleChangePage: PropTypes.func
+  items: PropTypes.array,
+  rowsPerPage: PropTypes.number,
+  page: PropTypes.object,
+  handleChangePage: PropTypes.func
 };
 
 export default Pagination;

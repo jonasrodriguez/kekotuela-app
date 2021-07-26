@@ -60,7 +60,7 @@ function AddOrder(props) {
   const content = (
     <Grid container spacing={2}>
       <Grid item xs={12}>
-        <NoteSelector onNote={onNoteSelected} />
+        <NoteSelector order={order} onUpdateNote={onNoteSelected} updateInfo={updateInfo} />
       </Grid>
       <Grid item xs={6}>
         <LaborerSelector laborers={laborers} onUpdateLaborers={onUpdateLaborers} />
@@ -95,7 +95,7 @@ function AddOrder(props) {
           </CardContent>
         </Card>
       </Grid>
-      <Grid item xs={6}/>
+      <Grid item xs={1}/>
       <Grid item xs={3}>
         <Card variant="outlined">
           <CardHeader subheader= "Firma cliente"/>

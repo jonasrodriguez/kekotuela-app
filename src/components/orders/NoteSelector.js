@@ -5,21 +5,18 @@ import { Note } from "../shared/models/Models";
 import NoteSearchSelect from "../shared/SearchSelectNote";
 
 function NoteSelector(props) {
-  const { onNote } = props;
-  const [note, setNote] = useState(Note);
-  const [showNoteInfo, setShowNoteInfo] = useState(false);
+  const { order, onUpdateNote, updateInfo } = props;
+  const [showNoteInfo, setShowNoteInfo] = useState((updateInfo.update) ? true : false);
 
-  const onNoteSelected = useCallback((selectedNote) => {
-    setNote(selectedNote);
+  const onNoteSelected = useCallback((note) => {
+    onUpdateNote(note);
     setShowNoteInfo(true);
-    onNote(selectedNote);
-  }, [onNote]);
+  }, [onUpdateNote]);
 
   const onNoteReset = useCallback(() => {
-    setNote(Note);
+    onUpdateNote(Note);
     setShowNoteInfo(false);
-    onNote(Note);
-  }, [onNote]);
+  }, [onUpdateNote]);
 
   const NoteDetails = (
     <Grid container spacing={2}>
@@ -28,10 +25,10 @@ function NoteSelector(props) {
           <CardHeader subheader= "Detalles Nota"/>
           <CardContent>
             <Typography variant="h5" component="h2">
-              {note.description}
+              {order.note.description}
             </Typography>                 
             <Typography variant="body2" component="p">
-            Ref. {note.reference} <br/> {note.comments}
+            Ref. {order.note.reference} <br/> {order.note.comments}
             </Typography>
           </CardContent>
           <CardActions>
@@ -50,11 +47,11 @@ function NoteSelector(props) {
           <CardHeader subheader= "Detalles Cliente"/>
           <CardContent>
             <Typography variant="h5" component="h2">
-              {note.client.name} {note.client.surname} {note.client.second_surname}          
+              {order.client.name} {order.client.surname} {order.client.second_surname}          
             </Typography>
             <Typography variant="body2" component="p">
-              {note.client.phone} - {note.client.email} <br/>
-              {note.client.address}, {note.client.cp}, {note.client.city}
+              {order.client.phone} - {order.client.email} <br/>
+              {order.client.address}, {order.client.cp}, {order.client.city}
             </Typography>
           </CardContent>
         </Card>
@@ -74,7 +71,9 @@ function NoteSelector(props) {
 }
 
 NoteSelector.propTypes = {
-  onNote: PropTypes.func.isRequired
+  onNote: PropTypes.object.isRequired,
+  onUpdateNote: PropTypes.func.isRequired,
+  updateInfo: PropTypes.object.isRequired,
 };
 
 export default NoteSelector;
